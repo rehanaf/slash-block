@@ -72,7 +72,7 @@ jobs:
 
       - name: Export Android
         run: |
-          godot --headless --export-release "Android" build/android/slash_block.apk
+          godot --headless --export-debug "Android" build/android/slash_block.apk
 
       - name: Export iOS (Xcode Project)
         run: |
