@@ -1,0 +1,327 @@
+[gd_scene load_steps=12 format=3 uid="uid://c5byj4bexdoxw"]
+
+[ext_resource type="Script" path="res://src/menu/menu.gd" id="1_1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_title"]
+bg_color = Color(0.0823529, 0.0901961, 0.129412, 0.823529)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.247059, 0.278431, 0.352941, 0.588235)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.294118)
+shadow_size = 8
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn"]
+bg_color = Color(0.121569, 0.529412, 0.768627, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.352941, 0.784314, 0.980392, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.156863)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.160784, 0.647059, 0.941176, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.552941, 0.878431, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_quit"]
+bg_color = Color(0.141176, 0.160784, 0.219608, 0.8)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.247059, 0.278431, 0.352941, 0.470588)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_quit_hover"]
+bg_color = Color(0.188235, 0.219608, 0.298039, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.352941, 0.384314, 0.470588, 0.6)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel_char"]
+bg_color = Color(0.0823529, 0.0901961, 0.129412, 0.823529)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.247059, 0.278431, 0.352941, 0.588235)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.294118)
+shadow_size = 8
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_preview_frame"]
+bg_color = Color(0.0470588, 0.054902, 0.0784314, 0.588235)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.180392, 0.203922, 0.262745, 0.5)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_arrow_btn"]
+bg_color = Color(0.141176, 0.160784, 0.219608, 0.823529)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.247059, 0.278431, 0.352941, 0.588235)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_arrow_btn_hover"]
+bg_color = Color(0.121569, 0.529412, 0.768627, 0.823529)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.352941, 0.784314, 0.980392, 0.784314)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_help"]
+bg_color = Color(0.0823529, 0.0901961, 0.129412, 0.470588)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1")
+
+[node name="PreviewPosition" type="Marker2D" parent="."]
+position = Vector2(768, 280)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="PanelTitle" type="Panel" parent="UI"]
+offset_left = 80.0
+offset_top = 80.0
+offset_right = 480.0
+offset_bottom = 210.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_title")
+
+[node name="Title" type="Label" parent="UI/PanelTitle"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 22.0
+offset_bottom = 73.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.352941, 0.784314, 0.980392, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.392157)
+theme_override_constant_override/outline_size = 6
+theme_override_font_sizes/font_size = 36
+text = "SLASH BLOCK 2D"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="UI/PanelTitle"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -49.0
+offset_right = -12.0
+offset_bottom = -21.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.701961, 0.721569, 0.784314, 1)
+theme_override_font_sizes/font_size = 14
+text = "Minecraft platformer adventure"
+horizontal_alignment = 1
+
+[node name="PanelMenu" type="Panel" parent="UI"]
+offset_left = 80.0
+offset_top = 236.0
+offset_right = 480.0
+offset_bottom = 420.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_title")
+
+[node name="StartButton" type="Button" parent="UI/PanelMenu"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 30.0
+offset_top = 34.0
+offset_right = -30.0
+offset_bottom = 90.0
+grow_horizontal = 2
+pivot_offset = Vector2(170, 28)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn")
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "START ADVENTURE"
+
+[node name="QuitButton" type="Button" parent="UI/PanelMenu"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 30.0
+offset_top = 104.0
+offset_right = -30.0
+offset_bottom = 160.0
+grow_horizontal = 2
+pivot_offset = Vector2(170, 28)
+theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_quit_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_quit")
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_quit")
+text = "QUIT GAME"
+
+[node name="PanelChar" type="Panel" parent="UI"]
+offset_left = 550.0
+offset_top = 80.0
+offset_right = 986.0
+offset_bottom = 526.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel_char")
+
+[node name="CharSelectTitle" type="Label" parent="UI/PanelChar"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 18.0
+offset_bottom = 44.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 15
+text = "SELECT CHARACTER"
+horizontal_alignment = 1
+
+[node name="PreviewFrame" type="Panel" parent="UI/PanelChar"]
+layout_mode = 0
+offset_left = 102.0
+offset_top = 58.0
+offset_right = 334.0
+offset_bottom = 338.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_preview_frame")
+
+[node name="CharNameLabel" type="Label" parent="UI/PanelChar"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = -88.0
+offset_right = -50.0
+offset_bottom = -58.0
+grow_vertical = 0
+pivot_offset = Vector2(168, 15)
+theme_override_colors/font_color = Color(0.352941, 0.784314, 0.980392, 1)
+theme_override_font_sizes/font_size = 18
+text = "Capten Panez"
+horizontal_alignment = 1
+
+[node name="PrevButton" type="Button" parent="UI/PanelChar"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 36.0
+offset_top = -94.0
+offset_right = 86.0
+offset_bottom = -44.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = SubResource("StyleBoxFlat_arrow_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_arrow_btn")
+theme_override_styles/normal = SubResource("StyleBoxFlat_arrow_btn")
+text = "<"
+
+[node name="NextButton" type="Button" parent="UI/PanelChar"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -86.0
+offset_top = -94.0
+offset_right = -36.0
+offset_bottom = -44.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = SubResource("StyleBoxFlat_arrow_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_arrow_btn")
+theme_override_styles/normal = SubResource("StyleBoxFlat_arrow_btn")
+text = ">"
+
+
+[node name="HelpPanel" type="Panel" parent="UI"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 80.0
+offset_top = -122.0
+offset_right = 480.0
+offset_bottom = -72.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_help")
+
+[node name="HelpLabel" type="Label" parent="UI/HelpPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_right = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.55, 0.57, 0.65, 1)
+theme_override_font_sizes/font_size = 11
+text = "Press A / D to Walk | Space to Jump (2x, 2.5b)
+Shift to Dash | Left Click or J to Attack (3x combo)"
+horizontal_alignment = 1
+vertical_alignment = 1

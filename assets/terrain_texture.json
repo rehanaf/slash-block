@@ -1,0 +1,111 @@
+{
+  "resource_pack_name": "RP_BB",
+  "texture_name": "atlas.terrain",
+  "padding": 16,
+  "num_mip_levels": 4,
+  "texture_data": {
+    "grass_side": {
+      "textures": [
+        {
+          "path": "textures/blocks/grass_side",
+          "overlay_color": "#94bf4c" // Forest
+        },
+        {
+          "path": "textures/blocks/grass_side",
+          "overlay_color": "#ccc341" // Savanna/Desert
+        },
+        {
+          "path": "textures/blocks/grass_side",
+          "overlay_color": "#bfb755"
+        },
+        {
+          "path": "textures/blocks/grass_side",
+          "overlay_color": "#b0d74d" // Birch Forest/Plains/Cherry Grove
+        },
+        {
+          "path": "textures/blocks/grass_side",
+          "overlay_color": "#73b828" // Jungle/Jungle Edge
+        },
+        {
+          "path": "textures/blocks/grass_side",
+          "overlay_color": "#88bb66"
+        },
+        {
+          "path": "textures/blocks/grass_side",
+          "overlay_color": "#86b87f"
+        },
+        {
+          "path": "textures/blocks/grass_side",
+          "overlay_color": "#64c73f"
+        },
+        {
+          "path": "textures/blocks/grass_side",
+          "overlay_color": "#86b783"
+        },
+        {
+          "path": "textures/blocks/grass_side",
+          "overlay_color": "#83b593"
+        },
+        {
+          "path": "textures/blocks/grass_side",
+          "overlay_color": "#80b497" // Taiga
+        },
+        {
+          "path": "textures/blocks/grass_side",
+          "overlay_color": "#91bd59"
+        },
+        {
+          "path": "textures/blocks/grass_side",
+          "overlay_color": "#90814d" // Badlands
+        },
+        {
+          "path": "textures/blocks/grass_side",
+          "overlay_color": "#8eb971"
+        },
+        {
+          "path": "textures/blocks/grass_side",
+          "overlay_color": "#697e3b" // Mangrove Swamp/Swamp
+        },
+        {
+          "path": "textures/blocks/grass_side",
+          "overlay_color": "#679f3d" // Dark Forest
+        },
+        {
+          "path": "textures/blocks/grass_side",
+          "overlay_color": "#778272" // Pale Garden
+        },
+        "textures/blocks/grass_block_snow"
+      ]
+    },
+    "glass": {
+      "textures": "textures/blocks/glass"
+    },
+    "glass_pane_top": {
+      "textures": "textures/blocks/glass_pane_top"
+    },
+    "leaves": {
+      "textures": [
+        "textures/blocks/leaves_oak",
+        "textures/blocks/leaves_spruce",
+        "textures/blocks/leaves_birch",
+        "textures/blocks/leaves_jungle",
+        "textures/blocks/leaves_oak_opaque",
+        "textures/blocks/leaves_spruce_opaque",
+        "textures/blocks/leaves_birch_opaque",
+        "textures/blocks/leaves_jungle_opaque"
+      ]
+    },
+    "leaves_carried": {
+      "textures": [
+        "textures/blocks/leaves_oak_carried",
+        "textures/blocks/leaves_spruce_carried",
+        "textures/blocks/leaves_birch_carried",
+        "textures/blocks/leaves_jungle_carried",
+        "textures/blocks/leaves_oak_carried",
+        "textures/blocks/leaves_spruce_carried",
+        "textures/blocks/leaves_birch_carried",
+        "textures/blocks/leaves_jungle_carried"
+      ]
+    }
+  }
+}

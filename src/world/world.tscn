@@ -1,0 +1,333 @@
+[gd_scene load_steps=14 format=3 uid="uid://dps7buj0jtfv7"]
+
+[ext_resource type="Script" path="res://src/world/world.gd" id="1_1"]
+[ext_resource type="Script" path="res://src/ui/touch_controls.gd" id="2_2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hud"]
+bg_color = Color(0.0823529, 0.0901961, 0.129412, 0.784314)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.247059, 0.278431, 0.352941, 0.470588)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.235294)
+shadow_size = 6
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_bg"]
+bg_color = Color(0.121569, 0.141176, 0.188235, 0.6)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_fill"]
+bg_color = Color(0.352941, 0.784314, 0.980392, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_fill"]
+bg_color = Color(0.180392, 0.8, 0.443137, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel_right"]
+bg_color = Color(0.0823529, 0.0901961, 0.129412, 0.627451)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.247059, 0.278431, 0.352941, 0.27451)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pause_btn"]
+bg_color = Color(0.0823529, 0.0901961, 0.129412, 0.784314)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.247059, 0.278431, 0.352941, 0.470588)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.156863)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pause_btn_hover"]
+bg_color = Color(0.121569, 0.529412, 0.768627, 0.823529)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.352941, 0.784314, 0.980392, 0.784314)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pause_action_btn"]
+bg_color = Color(0.121569, 0.529412, 0.768627, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.352941, 0.784314, 0.980392, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pause_menu_btn_hover"]
+bg_color = Color(0.188235, 0.219608, 0.298039, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.352941, 0.384314, 0.470588, 0.6)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="World" type="Node2D"]
+script = ExtResource("1_1")
+
+[node name="TileMap" type="TileMap" parent="."]
+texture_filter = 1
+format = 2
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(4, 4)
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="CanvasLayer/HUD"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 276.0
+offset_bottom = 252.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
+
+[node name="TitleLabel" type="Label" parent="CanvasLayer/HUD/Panel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 10.0
+offset_right = -12.0
+offset_bottom = 33.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.352941, 0.784314, 0.980392, 1)
+theme_override_font_sizes/font_size = 15
+text = "Slash Block 2D"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/HUD/Panel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 34.0
+offset_right = -12.0
+offset_bottom = 38.0
+grow_horizontal = 2
+
+[node name="HPLabel" type="Label" parent="CanvasLayer/HUD"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 44.0
+offset_right = 264.0
+offset_bottom = 62.0
+theme_override_colors/font_color = Color(0.180392, 0.8, 0.443137, 1)
+theme_override_font_sizes/font_size = 11
+text = "HP: 100 / 100"
+
+[node name="HPBar" type="ProgressBar" parent="CanvasLayer/HUD"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 64.0
+offset_right = 264.0
+offset_bottom = 74.0
+theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hp_fill")
+value = 100.0
+show_percentage = false
+
+[node name="SkinLabel" type="Label" parent="CanvasLayer/HUD"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 84.0
+offset_right = 264.0
+offset_bottom = 107.0
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 14
+text = "Skin: Steve"
+pivot_offset = Vector2(0, 11)
+
+[node name="ComboLabel" type="Label" parent="CanvasLayer/HUD"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 114.0
+offset_right = 264.0
+offset_bottom = 137.0
+theme_override_colors/font_color = Color(1, 0.768627, 0.176471, 1)
+theme_override_font_sizes/font_size = 14
+text = "Combo: Ready"
+pivot_offset = Vector2(0, 11)
+
+[node name="ComboProgress" type="ProgressBar" parent="CanvasLayer/HUD"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 140.0
+offset_right = 264.0
+offset_bottom = 146.0
+theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fill")
+value = 75.0
+show_percentage = false
+
+[node name="GuideLabel" type="Label" parent="CanvasLayer/HUD"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 158.0
+offset_right = 264.0
+offset_bottom = 243.0
+theme_override_colors/font_color = Color(0.701961, 0.721569, 0.784314, 1)
+theme_override_font_sizes/font_size = 11
+text = "A / D - Walk | S / Down - Sneak
+Space - Jump | Shift - Dash
+S + Space - Drop through platform
+Left Click / J - Attack (3x Combo)
+C - Skin | R - Reset | Esc - Pause"
+
+[node name="PauseButton" type="Button" parent="CanvasLayer/HUD"]
+layout_mode = 0
+offset_left = 292.0
+offset_top = 16.0
+offset_right = 342.0
+offset_bottom = 66.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = SubResource("StyleBoxFlat_pause_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pause_btn")
+theme_override_styles/normal = SubResource("StyleBoxFlat_pause_btn")
+text = "||"
+
+[node name="PauseMenu" type="Control" parent="CanvasLayer"]
+visible = false
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="CanvasLayer/PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0470588, 0.054902, 0.0784314, 0.627451)
+
+[node name="Panel" type="Panel" parent="CanvasLayer/PauseMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -140.0
+offset_right = 180.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
+
+[node name="Title" type="Label" parent="CanvasLayer/PauseMenu/Panel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 24.0
+offset_bottom = 60.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.352941, 0.784314, 0.980392, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.392157)
+theme_override_constant_override/outline_size = 4
+theme_override_font_sizes/font_size = 24
+text = "GAME PAUSED"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="CanvasLayer/PauseMenu/Panel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 40.0
+offset_top = 96.0
+offset_right = -40.0
+offset_bottom = 146.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 15
+theme_override_styles/hover = SubResource("StyleBoxFlat_pause_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pause_action_btn")
+theme_override_styles/normal = SubResource("StyleBoxFlat_pause_action_btn")
+text = "RESUME GAME"
+
+[node name="MainMenuButton" type="Button" parent="CanvasLayer/PauseMenu/Panel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -106.0
+offset_right = -40.0
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
+theme_override_font_sizes/font_size = 15
+theme_override_styles/hover = SubResource("StyleBoxFlat_pause_menu_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pause_btn")
+theme_override_styles/normal = SubResource("StyleBoxFlat_pause_btn")
+text = "RETURN TO MENU"
+
+[node name="TouchControls" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="TouchControls"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_2")
+
