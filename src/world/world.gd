@@ -94,8 +94,7 @@ func setup_tileset():
 	tileset.add_physics_layer()
 	
 	# Create atlas source
-	var img = Image.load_from_file("res://assets/tileset.png")
-	var texture = ImageTexture.create_from_image(img)
+	var texture = load("res://assets/tileset.png")
 	if not texture:
 		push_error("Failed to load tileset texture!")
 		return
