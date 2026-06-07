@@ -20,19 +20,36 @@ func _ready():
 	visible = OS.has_feature("mobile") or OS.has_feature("web") or DisplayServer.is_touchscreen_available() or OS.is_debug_build()
 	
 	setup_buttons()
-	get_viewport().size_changed.connect(setup_buttons)
+	resized.connect(setup_buttons)
+	if get_tree() and get_tree().root:
+		get_tree().root.size_changed.connect(setup_buttons)
+
 
 func setup_buttons():
 	var view_size = get_viewport().get_visible_rect().size
+	var target_ratio = 16.0 / 9.0
+	var actual_ratio = view_size.x / view_size.y
 	
-	# Position joystick in bottom-left
-	joystick_center = Vector2(120, view_size.y - 120)
+	var margin_x = 0.0
+	if actual_ratio > target_ratio:
+		margin_x = (view_size.x - (view_size.y * target_ratio)) / 2.0
+		
+	# Shift the entire TouchControls container itself!
+	offset_left = margin_x
+	offset_right = -margin_x
+	
+	# Compute dimensions relative to the container coordinates
+	var safe_width = view_size.x - 2.0 * margin_x
+	var safe_height = view_size.y
+	
+	# Position joystick in bottom-left (relative to the container)
+	joystick_center = Vector2(120, safe_height - 120)
 	joystick_pos = joystick_center
 	
-	# Action buttons in bottom-right
+	# Action buttons in bottom-right (relative to the container)
 	buttons = {
 		"attack": {
-			"center": Vector2(view_size.x - 70, view_size.y - 70),
+			"center": Vector2(safe_width - 70, safe_height - 70),
 			"radius": 35.0,
 			"color": Color(0.9, 0.2, 0.2, 0.35), # Transparent red
 			"color_pressed": Color(0.9, 0.2, 0.2, 0.7),
@@ -42,7 +59,7 @@ func setup_buttons():
 			"label": "ATTACK"
 		},
 		"jump": {
-			"center": Vector2(view_size.x - 160, view_size.y - 70),
+			"center": Vector2(safe_width - 160, safe_height - 70),
 			"radius": 30.0,
 			"color": Color(0.2, 0.6, 0.9, 0.35), # Transparent blue
 			"color_pressed": Color(0.2, 0.6, 0.9, 0.7),
@@ -52,7 +69,7 @@ func setup_buttons():
 			"label": "JUMP"
 		},
 		"dash": {
-			"center": Vector2(view_size.x - 70, view_size.y - 160),
+			"center": Vector2(safe_width - 70, safe_height - 160),
 			"radius": 28.0,
 			"color": Color(0.9, 0.7, 0.1, 0.35), # Transparent yellow
 			"color_pressed": Color(0.9, 0.7, 0.1, 0.7),
@@ -62,7 +79,7 @@ func setup_buttons():
 			"label": "DASH"
 		},
 		"change_skin": {
-			"center": Vector2(view_size.x - 160, view_size.y - 160),
+			"center": Vector2(safe_width - 160, safe_height - 160),
 			"radius": 24.0,
 			"color": Color(0.5, 0.8, 0.2, 0.35), # Transparent green
 			"color_pressed": Color(0.5, 0.8, 0.2, 0.7),
@@ -70,6 +87,16 @@ func setup_buttons():
 			"pressed": false,
 			"touch_index": -1,
 			"label": "SKIN"
+		},
+		"change_weapon": {
+			"center": Vector2(safe_width - 240, safe_height - 160),
+			"radius": 24.0,
+			"color": Color(0.2, 0.8, 0.8, 0.35), # Transparent cyan
+			"color_pressed": Color(0.2, 0.8, 0.8, 0.7),
+			"action": "change_weapon",
+			"pressed": false,
+			"touch_index": -1,
+			"label": "WEAPON"
 		}
 	}
 	queue_redraw()
@@ -93,106 +120,107 @@ func _input(event):
 	var is_mouse_click = event is InputEventMouseButton
 	var is_mouse_motion = event is InputEventMouseMotion
 	
-	if is_touch or is_mouse_click:
-		var pos = event.position
-		var pressed = event.pressed if is_touch else event.is_pressed()
-		var index = event.index if is_touch else 0
+	if is_touch or is_mouse_click or is_drag or is_mouse_motion:
+		# Convert global event to local event coordinates to align with our shifted container!
+		var local_event = make_input_local(event)
+		var pos = local_event.position
+		var index = event.index if (is_touch or is_drag) else 0
 		
-		# If click/touch is started
-		if pressed:
-			# Check action buttons
-			for b_name in buttons.keys():
-				var btn = buttons[b_name]
-				if pos.distance_to(btn.center) < btn.radius:
-					btn.pressed = true
-					btn.touch_index = index
-					
-					# Press action
-					Input.action_press(btn.action)
-					var ev = InputEventAction.new()
-					ev.action = btn.action
-					ev.pressed = true
-					Input.parse_input_event(ev)
-					
-					queue_redraw()
+		if is_touch or is_mouse_click:
+			var pressed = event.pressed if is_touch else event.is_pressed()
+			
+			# If click/touch is started
+			if pressed:
+				# Check action buttons
+				for b_name in buttons.keys():
+					var btn = buttons[b_name]
+					if pos.distance_to(btn.center) < btn.radius:
+						btn.pressed = true
+						btn.touch_index = index
+						
+						# Press action
+						Input.action_press(btn.action)
+						var ev = InputEventAction.new()
+						ev.action = btn.action
+						ev.pressed = true
+						Input.parse_input_event(ev)
+						
+						queue_redraw()
+						get_viewport().set_input_as_handled()
+						return
+						
+				# Check joystick area
+				if pos.distance_to(joystick_center) < JOYSTICK_MAX_RADIUS + 40.0:
+					joystick_active = true
+					joystick_touch_index = index
+					update_joystick(pos)
 					get_viewport().set_input_as_handled()
-					return
+			else:
+				var handled_release = false
+				# Release action buttons
+				for b_name in buttons.keys():
+					var btn = buttons[b_name]
+					if btn.pressed and (not is_touch or btn.touch_index == index):
+						btn.pressed = false
+						btn.touch_index = -1
+						
+						# Release action
+						Input.action_release(btn.action)
+						var ev = InputEventAction.new()
+						ev.action = btn.action
+						ev.pressed = false
+						Input.parse_input_event(ev)
+						
+						queue_redraw()
+						handled_release = true
+						
+				# Release joystick
+				if joystick_active and (not is_touch or joystick_touch_index == index):
+					joystick_active = false
+					joystick_touch_index = -1
+					joystick_pos = joystick_center
 					
-			# Check joystick area
-			if pos.distance_to(joystick_center) < JOYSTICK_MAX_RADIUS + 40.0:
-				joystick_active = true
-				joystick_touch_index = index
-				update_joystick(pos)
-				get_viewport().set_input_as_handled()
-		else:
-			var handled_release = false
-			# Release action buttons
-			for b_name in buttons.keys():
-				var btn = buttons[b_name]
-				if btn.pressed and (not is_touch or btn.touch_index == index):
-					btn.pressed = false
-					btn.touch_index = -1
+					# Release movement actions
+					Input.action_release("move_left")
+					Input.action_release("move_right")
+					Input.action_release("sneak")
 					
-					# Release action
-					Input.action_release(btn.action)
-					var ev = InputEventAction.new()
-					ev.action = btn.action
-					ev.pressed = false
-					Input.parse_input_event(ev)
-					
+					# Parse release events
+					for act in ["move_left", "move_right", "sneak"]:
+						var ev = InputEventAction.new()
+						ev.action = act
+						ev.pressed = false
+						Input.parse_input_event(ev)
+						
 					queue_redraw()
 					handled_release = true
 					
-			# Release joystick
-			if joystick_active and (not is_touch or joystick_touch_index == index):
-				joystick_active = false
-				joystick_touch_index = -1
-				joystick_pos = joystick_center
-				
-				# Release movement actions
-				Input.action_release("move_left")
-				Input.action_release("move_right")
-				Input.action_release("sneak")
-				
-				# Parse release events
-				for act in ["move_left", "move_right", "sneak"]:
-					var ev = InputEventAction.new()
-					ev.action = act
-					ev.pressed = false
-					Input.parse_input_event(ev)
+				if handled_release:
+					get_viewport().set_input_as_handled()
 					
-				queue_redraw()
-				handled_release = true
-				
-			if handled_release:
+		elif is_drag or is_mouse_motion:
+			# Dragging joystick
+			if joystick_active and (not is_drag or joystick_touch_index == index):
+				update_joystick(pos)
 				get_viewport().set_input_as_handled()
 				
-	elif is_drag or is_mouse_motion:
-		var pos = event.position
-		var index = event.index if is_drag else 0
-		
-		# Dragging joystick
-		if joystick_active and (not is_drag or joystick_touch_index == index):
-			update_joystick(pos)
-			get_viewport().set_input_as_handled()
-			
-		# Dragging off buttons (cancellation)
-		for b_name in buttons.keys():
-			var btn = buttons[b_name]
-			if btn.pressed and (not is_drag or btn.touch_index == index):
-				if pos.distance_to(btn.center) > btn.radius * 1.6:
-					btn.pressed = false
-					btn.touch_index = -1
-					
-					# Release action
-					Input.action_release(btn.action)
-					var ev = InputEventAction.new()
-					ev.action = btn.action
-					ev.pressed = false
-					Input.parse_input_event(ev)
-					
-					queue_redraw()
-					get_viewport().set_input_as_handled()
+			# Dragging off buttons (cancellation)
+			for b_name in buttons.keys():
+				var btn = buttons[b_name]
+				if btn.pressed and (not is_drag or btn.touch_index == index):
+					if pos.distance_to(btn.center) > btn.radius * 1.6:
+						btn.pressed = false
+						btn.touch_index = -1
+						
+						# Release action
+						Input.action_release(btn.action)
+						var ev = InputEventAction.new()
+						ev.action = btn.action
+						ev.pressed = false
+						Input.parse_input_event(ev)
+						
+						queue_redraw()
+						get_viewport().set_input_as_handled()
 
 func update_joystick(touch_pos: Vector2):
 	var dir = touch_pos - joystick_center

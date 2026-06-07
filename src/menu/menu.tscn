@@ -140,14 +140,22 @@ position = Vector2(768, 280)
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="PanelTitle" type="Panel" parent="UI"]
+[node name="MenuContainer" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelTitle" type="Panel" parent="UI/MenuContainer"]
 offset_left = 80.0
 offset_top = 80.0
 offset_right = 480.0
 offset_bottom = 210.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_title")
 
-[node name="Title" type="Label" parent="UI/PanelTitle"]
+[node name="Title" type="Label" parent="UI/MenuContainer/PanelTitle"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -161,7 +169,7 @@ theme_override_font_sizes/font_size = 36
 text = "SLASH BLOCK 2D"
 horizontal_alignment = 1
 
-[node name="Subtitle" type="Label" parent="UI/PanelTitle"]
+[node name="Subtitle" type="Label" parent="UI/MenuContainer/PanelTitle"]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -176,14 +184,14 @@ theme_override_font_sizes/font_size = 14
 text = "Minecraft platformer adventure"
 horizontal_alignment = 1
 
-[node name="PanelMenu" type="Panel" parent="UI"]
+[node name="PanelMenu" type="Panel" parent="UI/MenuContainer"]
 offset_left = 80.0
 offset_top = 236.0
 offset_right = 480.0
 offset_bottom = 420.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_title")
 
-[node name="StartButton" type="Button" parent="UI/PanelMenu"]
+[node name="StartButton" type="Button" parent="UI/MenuContainer/PanelMenu"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -201,7 +209,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_btn")
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
 text = "START ADVENTURE"
 
-[node name="QuitButton" type="Button" parent="UI/PanelMenu"]
+[node name="QuitButton" type="Button" parent="UI/MenuContainer/PanelMenu"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -218,14 +226,14 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_quit")
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_quit")
 text = "QUIT GAME"
 
-[node name="PanelChar" type="Panel" parent="UI"]
+[node name="PanelChar" type="Panel" parent="UI/MenuContainer"]
 offset_left = 550.0
 offset_top = 80.0
 offset_right = 986.0
 offset_bottom = 526.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel_char")
 
-[node name="CharSelectTitle" type="Label" parent="UI/PanelChar"]
+[node name="CharSelectTitle" type="Label" parent="UI/MenuContainer/PanelChar"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -237,7 +245,7 @@ theme_override_font_sizes/font_size = 15
 text = "SELECT CHARACTER"
 horizontal_alignment = 1
 
-[node name="PreviewFrame" type="Panel" parent="UI/PanelChar"]
+[node name="PreviewFrame" type="Panel" parent="UI/MenuContainer/PanelChar"]
 layout_mode = 0
 offset_left = 102.0
 offset_top = 58.0
@@ -245,7 +253,7 @@ offset_right = 334.0
 offset_bottom = 338.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_preview_frame")
 
-[node name="CharNameLabel" type="Label" parent="UI/PanelChar"]
+[node name="CharNameLabel" type="Label" parent="UI/MenuContainer/PanelChar"]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -261,7 +269,7 @@ theme_override_font_sizes/font_size = 18
 text = "Capten Panez"
 horizontal_alignment = 1
 
-[node name="PrevButton" type="Button" parent="UI/PanelChar"]
+[node name="PrevButton" type="Button" parent="UI/MenuContainer/PanelChar"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -278,7 +286,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_arrow_btn")
 theme_override_styles/normal = SubResource("StyleBoxFlat_arrow_btn")
 text = "<"
 
-[node name="NextButton" type="Button" parent="UI/PanelChar"]
+[node name="NextButton" type="Button" parent="UI/MenuContainer/PanelChar"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -299,7 +307,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_arrow_btn")
 text = ">"
 
 
-[node name="HelpPanel" type="Panel" parent="UI"]
+[node name="HelpPanel" type="Panel" parent="UI/MenuContainer"]
 anchors_preset = 12
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -310,7 +318,7 @@ offset_bottom = -72.0
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_help")
 
-[node name="HelpLabel" type="Label" parent="UI/HelpPanel"]
+[node name="HelpLabel" type="Label" parent="UI/MenuContainer/HelpPanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

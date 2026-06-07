@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://bchg820g6lq4m"]
+[gd_scene load_steps=7 format=3 uid="uid://bchg820g6lq4m"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_1"]
 [ext_resource type="Script" path="res://src/player/slash_effect.gd" id="2_2"]
 [ext_resource type="Texture2D" uid="uid://d02suq1ctfe30" path="res://assets/weapon/sword.png" id="3_3"]
+[ext_resource type="Script" path="res://src/player/dash_effect.gd" id="4_4"]
+
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
 size = Vector2(8, 31)
@@ -83,3 +85,7 @@ shape = SubResource("RectangleShape2D_2")
 
 [node name="SlashEffect" type="Node2D" parent="FlippedContainer"]
 script = ExtResource("2_2")
+
+[node name="DashEffect" type="Node2D" parent="FlippedContainer"]
+script = ExtResource("4_4")
+

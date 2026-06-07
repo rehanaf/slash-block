@@ -9,12 +9,12 @@ var skins = ["captenpanez", "steve", "dream", "fiz"]
 var selected_idx = 0
 
 # Nodes
-@onready var char_name_label = $UI/PanelChar/CharNameLabel
+@onready var char_name_label = $UI/MenuContainer/PanelChar/CharNameLabel
 @onready var preview_pos = $PreviewPosition
-@onready var start_button = $UI/PanelMenu/StartButton
-@onready var quit_button = $UI/PanelMenu/QuitButton
-@onready var prev_button = $UI/PanelChar/PrevButton
-@onready var next_button = $UI/PanelChar/NextButton
+@onready var start_button = $UI/MenuContainer/PanelMenu/StartButton
+@onready var quit_button = $UI/MenuContainer/PanelMenu/QuitButton
+@onready var prev_button = $UI/MenuContainer/PanelChar/PrevButton
+@onready var next_button = $UI/MenuContainer/PanelChar/NextButton
 
 # Background elements
 var clouds = []
@@ -39,6 +39,12 @@ func _ready():
 	prev_button.pressed.connect(_on_prev_pressed)
 	next_button.pressed.connect(_on_next_pressed)
 	
+	# Connect resize signal
+	resized.connect(adjust_menu_safe_area)
+	if get_tree() and get_tree().root:
+		get_tree().root.size_changed.connect(adjust_menu_safe_area)
+	adjust_menu_safe_area()
+	
 	# Create some clouds for the background
 	for i in range(5):
 		clouds.append({
@@ -46,6 +52,28 @@ func _ready():
 			"speed": randf_range(10, 25),
 			"size": Vector2(randf_range(60, 120), randf_range(20, 40))
 		})
+
+func adjust_menu_safe_area():
+	var view_size = get_viewport().get_visible_rect().size
+	var target_ratio = 16.0 / 9.0
+	var actual_ratio = view_size.x / view_size.y
+	var margin_x = 0.0
+	if actual_ratio > target_ratio:
+		margin_x = (view_size.x - (view_size.y * target_ratio)) / 2.0
+		
+	# Shift the entire MenuContainer instead of individual panels!
+	var menu_container = get_node_or_null("UI/MenuContainer")
+	if menu_container:
+		menu_container.offset_left = margin_x
+		menu_container.offset_right = -margin_x
+		
+	var preview_position = get_node_or_null("PreviewPosition")
+	if preview_position:
+		preview_position.position.x = 768.0 + margin_x
+		
+	if player_preview:
+		player_preview.position.x = 768.0 + margin_x
+
 
 func setup_menu_inputs():
 	# Make sure actions like ui_cancel are ready

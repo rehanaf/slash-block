@@ -110,7 +110,7 @@ texture_filter = 1
 format = 2
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(4, 4)
+zoom = Vector2(2.5, 2.5)
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
 
@@ -180,31 +180,42 @@ show_percentage = false
 [node name="SkinLabel" type="Label" parent="CanvasLayer/HUD"]
 layout_mode = 0
 offset_left = 28.0
-offset_top = 84.0
+offset_top = 80.0
 offset_right = 264.0
-offset_bottom = 107.0
+offset_bottom = 98.0
 theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 12
 text = "Skin: Steve"
-pivot_offset = Vector2(0, 11)
+pivot_offset = Vector2(0, 9)
+
+[node name="WeaponLabel" type="Label" parent="CanvasLayer/HUD"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 100.0
+offset_right = 264.0
+offset_bottom = 118.0
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 12
+text = "Weapon: Diamond Sword"
+pivot_offset = Vector2(0, 9)
 
 [node name="ComboLabel" type="Label" parent="CanvasLayer/HUD"]
 layout_mode = 0
 offset_left = 28.0
-offset_top = 114.0
+offset_top = 120.0
 offset_right = 264.0
-offset_bottom = 137.0
+offset_bottom = 138.0
 theme_override_colors/font_color = Color(1, 0.768627, 0.176471, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 12
 text = "Combo: Ready"
-pivot_offset = Vector2(0, 11)
+pivot_offset = Vector2(0, 9)
 
 [node name="ComboProgress" type="ProgressBar" parent="CanvasLayer/HUD"]
 layout_mode = 0
 offset_left = 28.0
-offset_top = 140.0
+offset_top = 142.0
 offset_right = 264.0
-offset_bottom = 146.0
+offset_bottom = 148.0
 theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fill")
 value = 75.0
@@ -222,7 +233,7 @@ text = "A / D - Walk | S / Down - Sneak
 Space - Jump | Shift - Dash
 S + Space - Drop through platform
 Left Click / J - Attack (3x Combo)
-C - Skin | R - Reset | Esc - Pause"
+C - Skin | V - Weapon | R - Reset | Esc - Pause"
 
 [node name="PauseButton" type="Button" parent="CanvasLayer/HUD"]
 layout_mode = 0

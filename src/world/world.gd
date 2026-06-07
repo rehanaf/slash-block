@@ -17,7 +17,9 @@ var player_inst = null
 @onready var hud_hp_label = $CanvasLayer/HUD/HPLabel
 @onready var hud_hp_bar = $CanvasLayer/HUD/HPBar
 @onready var hud_skin_label = $CanvasLayer/HUD/SkinLabel
+@onready var hud_weapon_label = $CanvasLayer/HUD/WeaponLabel
 @onready var hud_combo_label = $CanvasLayer/HUD/ComboLabel
+
 @onready var hud_combo_progress = $CanvasLayer/HUD/ComboProgress
 @onready var pause_button = $CanvasLayer/HUD/PauseButton
 @onready var pause_menu = $CanvasLayer/PauseMenu
@@ -57,6 +59,14 @@ func _ready():
 	
 	# Set background color to Minecraft sky blue
 	RenderingServer.set_default_clear_color(Color(0.5, 0.7, 1.0))
+	
+	# 6. Adjust HUD positioning based on 16:9 safe area
+	$CanvasLayer/HUD.resized.connect(adjust_hud_safe_area)
+	if get_tree() and get_tree().root:
+		get_tree().root.size_changed.connect(adjust_hud_safe_area)
+	adjust_hud_safe_area()
+
+
 
 func setup_inputs():
 	var inputs = {
@@ -66,8 +76,10 @@ func setup_inputs():
 		"dash": [KEY_SHIFT, KEY_K],
 		"attack": [KEY_J],
 		"change_skin": [KEY_C],
+		"change_weapon": [KEY_V],
 		"reset": [KEY_R],
 		"sneak": [KEY_S, KEY_DOWN]
+
 	}
 	
 	for action in inputs.keys():
@@ -302,9 +314,13 @@ func spawn_player():
 	# Connect signals
 	player_inst.player_attacked.connect(_on_player_attacked)
 	player_inst.skin_changed.connect(_on_player_skin_changed)
+	player_inst.weapon_changed.connect(_on_player_weapon_changed)
 	
 	# Update initial HUD
 	hud_skin_label.text = "Skin: " + player_inst.skins[player_inst.current_skin_index].capitalize()
+	if has_node("/root/Global"):
+		hud_weapon_label.text = "Weapon: " + get_node("/root/Global").selected_weapon
+
 
 func spawn_enemies():
 	# Strategic Enemy spawns:
@@ -340,7 +356,7 @@ func place_tutorial_labels():
 func create_world_label(txt: String, pos: Vector2):
 	var l = Label.new()
 	l.text = txt
-	l.scale = Vector2(0.2, 0.2) # crisp text when scaled up by camera
+	l.scale = Vector2(0.32, 0.32) # crisp text when scaled up by camera
 	l.position = pos
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	l.add_theme_color_override("font_color", Color(1, 1, 1, 0.85))
@@ -424,6 +440,14 @@ func _on_player_skin_changed(new_skin_name: String):
 	hud_skin_label.scale = Vector2(1.2, 1.2)
 	tween.tween_property(hud_skin_label, "scale", Vector2(1.0, 1.0), 0.15)
 
+func _on_player_weapon_changed(new_weapon_name: String):
+	hud_weapon_label.text = "Weapon: " + new_weapon_name
+	# Flash label
+	var tween = create_tween()
+	hud_weapon_label.scale = Vector2(1.2, 1.2)
+	tween.tween_property(hud_weapon_label, "scale", Vector2(1.0, 1.0), 0.15)
+
+
 # GPUParticles2D pixel particle burst
 func create_particles(pos: Vector2, color: Color, count: int):
 	var particles = GPUParticles2D.new()
@@ -479,3 +503,19 @@ func create_particles(pos: Vector2, color: Color, count: int):
 	
 	# Automatically clean up when finished
 	particles.finished.connect(particles.queue_free)
+
+func adjust_hud_safe_area():
+	var view_size = get_viewport().get_visible_rect().size
+	var target_ratio = 16.0 / 9.0
+	var actual_ratio = view_size.x / view_size.y
+	var margin_x = 0.0
+	if actual_ratio > target_ratio:
+		margin_x = (view_size.x - (view_size.y * target_ratio)) / 2.0
+		
+	# Shift the entire HUD container instead of individual elements!
+	var hud = $CanvasLayer/HUD
+	if hud:
+		hud.offset_left = margin_x
+		hud.offset_right = -margin_x
+
+

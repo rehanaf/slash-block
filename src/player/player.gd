@@ -58,6 +58,8 @@ var is_dead: bool = false
 @onready var bone_sword = $FlippedContainer/Bones/Bone_Body/Bone_RightArm/Bone_Sword
 @onready var attack_area = $FlippedContainer/AttackArea
 @onready var slash_effect = $FlippedContainer/SlashEffect
+@onready var dash_effect = $FlippedContainer/DashEffect
+
 
 
 # Procedural Animation helper variables
@@ -75,6 +77,10 @@ var prev_state: String = ""
 # Sound effects or hit signals
 signal player_attacked(step)
 signal skin_changed(new_skin_name)
+signal weapon_changed(new_weapon_name)
+
+var current_weapon_index = 0
+
 
 func _ready():
 	# Calculate jump velocity based on gravity to ensure it reaches exactly 2.5 blocks (40px)
@@ -93,6 +99,18 @@ func _ready():
 			current_skin_index = idx
 	apply_skin(skins[current_skin_index])
 	
+	# Apply initial weapon from Global autoload if available
+	if has_node("/root/Global"):
+		var global = get_node("/root/Global")
+		var idx = 0
+		for i in range(global.weapons.size()):
+			if global.weapons[i].name == global.selected_weapon:
+				idx = i
+				break
+		current_weapon_index = idx
+	apply_weapon(current_weapon_index)
+
+	
 	# Enable nearest filtering for all child sprites (pixel art crispness)
 	flipped_container.texture_filter = TEXTURE_FILTER_NEAREST
 	
@@ -109,6 +127,10 @@ func _unhandled_input(event):
 		
 	if event.is_action_pressed("change_skin"):
 		cycle_skin()
+		
+	if event.is_action_pressed("change_weapon"):
+		cycle_weapon()
+
 		
 	if event.is_action_pressed("attack") and attack_cooldown <= 0:
 		trigger_attack()
@@ -230,10 +252,6 @@ func _physics_process(delta):
 		velocity = dash_direction * DASH_SPEED
 		move_and_slide()
 		
-		# Spawn dash dust/ghost trail effect
-		if Engine.get_physics_frames() % 2 == 0:
-			create_ghost_trail()
-			
 		if dash_timer <= 0:
 			is_dashing = false
 			# Dampen speed slightly after dash
@@ -294,6 +312,33 @@ func start_dash():
 	# Small screenshake/impact
 	if get_parent() and get_parent().has_method("shake_camera"):
 		get_parent().shake_camera(2.0, 0.1)
+		
+	# Trigger slash-style dash effect with active skin colors
+	if dash_effect:
+		var skin_colors = {
+			"captenpanez": {
+				"inner": Color(1.0, 0.75, 0.25),   # Bright Orange/Yellow
+				"outline": Color(0.95, 0.15, 0.1)   # Deep Red
+			},
+			"steve": {
+				"inner": Color(0.45, 0.85, 1.0),   # Light Cyan
+				"outline": Color(0.1, 0.45, 0.95)   # Rich Blue
+			},
+			"dream": {
+				"inner": Color(0.6, 0.95, 0.5),     # Light Lime
+				"outline": Color(0.15, 0.65, 0.25)  # Dark Green
+			},
+			"fiz": {
+				"inner": Color(0.95, 0.55, 0.95),   # Bright Pink
+				"outline": Color(0.65, 0.15, 0.85)  # Deep Purple
+			}
+		}
+		var colors = skin_colors.get(skins[current_skin_index], {
+			"inner": Color(0.45, 0.85, 1.0),
+			"outline": Color(0.1, 0.45, 0.95)
+		})
+		dash_effect.play_dash(DASH_DURATION, colors.inner, colors.inner)
+
 
 func trigger_attack():
 	# Decide next combo step
@@ -319,14 +364,9 @@ func trigger_attack():
 	
 	# Trigger slash graphic effect
 	if slash_effect:
-		var skin_colors = {
-			"captenpanez": Color(1.0, 0.25, 0.1),
-			"steve": Color(0.2, 0.65, 1.0),
-			"dream": Color(0.25, 0.85, 0.25),
-			"fiz": Color(0.75, 0.2, 0.95)
-		}
-		var skin_color = skin_colors.get(skins[current_skin_index], Color(0.2, 0.65, 1.0))
-		slash_effect.play_slash(combo_step, skin_color)
+		var colors = get_weapon_colors()
+		slash_effect.play_slash(combo_step, colors.inner, colors.outline)
+
 		
 	# Detect hits in Area2D
 	check_attack_collisions()
@@ -568,23 +608,6 @@ func ease_out_cubic(x: float) -> float:
 	return 1.0 - pow(1.0 - x, 3.0)
 
 # Visual effects spawners
-func create_ghost_trail():
-	# Spawn a temporary visual node for dash trail in the world
-	var trail = Sprite2D.new()
-	trail.texture = $FlippedContainer/Bones/Bone_Body/Body.texture
-	trail.texture_filter = TEXTURE_FILTER_NEAREST
-	trail.global_position = bone_body.global_position
-	trail.global_rotation = bone_body.global_rotation
-	trail.global_scale = global_scale * flipped_container.scale
-	# Make it look like a red/blue glitch trail
-	trail.modulate = Color(0.3, 0.7, 1.0, 0.5)
-	get_parent().add_child(trail)
-	
-	# Tween to fade out and delete
-	var tween = create_tween()
-	tween.tween_property(trail, "modulate:a", 0.0, 0.2)
-	tween.tween_callback(trail.queue_free)
-
 func spawn_jump_particles():
 	if get_parent() and get_parent().has_method("create_particles"):
 		get_parent().create_particles(global_position + Vector2(0, 16), Color(0.9, 0.9, 0.9, 0.6), 8)
@@ -864,7 +887,7 @@ func die():
 	# Display "YOU DIED" text
 	var label = Label.new()
 	label.text = "YOU DIED"
-	label.scale = Vector2(0.4, 0.4)
+	label.scale = Vector2(0.6, 0.6)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.position = global_position + Vector2(-36, -30)
 	label.add_theme_color_override("font_color", Color(0.9, 0.1, 0.1))
@@ -881,6 +904,112 @@ func die():
 	get_tree().create_timer(1.5).timeout.connect(func():
 		get_tree().reload_current_scene()
 	)
+
+func apply_weapon(index: int):
+	current_weapon_index = index
+	var weapon_data = null
+	if has_node("/root/Global"):
+		var global = get_node("/root/Global")
+		if index >= 0 and index < global.weapons.size():
+			weapon_data = global.weapons[index]
+			global.selected_weapon = weapon_data.name
+			
+	if weapon_data:
+		var tex = load(weapon_data.texture)
+		if tex:
+			var sword_node = $FlippedContainer/Bones/Bone_Body/Bone_RightArm/Bone_Sword/Sword
+			if sword_node:
+				sword_node.texture = tex
+		weapon_changed.emit(weapon_data.name)
+
+func cycle_weapon():
+	if has_node("/root/Global"):
+		var global = get_node("/root/Global")
+		var next_idx = (current_weapon_index + 1) % global.weapons.size()
+		apply_weapon(next_idx)
+		spawn_skin_particles() # Visual feedback on swap
+
+func get_weapon_colors() -> Dictionary:
+	var default_colors = {
+		"inner": Color(0.45, 0.85, 1.0),
+		"outline": Color(0.1, 0.45, 0.95)
+	}
+	
+	if has_node("/root/Global"):
+		var global = get_node("/root/Global")
+		if current_weapon_index >= 0 and current_weapon_index < global.weapons.size():
+			var weapon_data = global.weapons[current_weapon_index]
+			return {
+				"inner": weapon_data.inner,
+				"outline": weapon_data.outline
+			}
+			
+	# Fallback: try to sample colors from the texture if it's dynamic
+	var sword_sprite = $FlippedContainer/Bones/Bone_Body/Bone_RightArm/Bone_Sword/Sword
+	if sword_sprite and sword_sprite.texture:
+		return get_colors_from_texture(sword_sprite.texture)
+		
+	return default_colors
+
+func get_colors_from_texture(tex: Texture2D) -> Dictionary:
+	var default_inner = Color(1.0, 1.0, 1.0)
+	var default_outline = Color(0.0, 0.0, 0.0)
+	
+	if not tex:
+		return {"inner": default_inner, "outline": default_outline}
+		
+	var img = tex.get_image()
+	if not img:
+		return {"inner": default_inner, "outline": default_outline}
+		
+	var unique_colors: Dictionary = {}
+	var width = img.get_width()
+	var height = img.get_height()
+	
+	for y in range(height):
+		for x in range(width):
+			var c = img.get_pixel(x, y)
+			if c.a > 0.1: # Skip transparent
+				# Convert to a string key to group colors (quantize color values to avoid noise)
+				var r_q = snapped(c.r, 0.05)
+				var g_q = snapped(c.g, 0.05)
+				var b_q = snapped(c.b, 0.05)
+				var q_color = Color(r_q, g_q, b_q)
+				
+				# Filter out pure black and pure white if possible
+				if q_color.v > 0.95 and q_color.s < 0.05:
+					continue # Skip white/light gray highlight
+				if q_color.v < 0.15:
+					continue # Skip very dark outlines
+					
+				if not unique_colors.has(q_color):
+					unique_colors[q_color] = 0
+				unique_colors[q_color] += 1
+				
+	var color_list = unique_colors.keys()
+	if color_list.is_empty():
+		return {"inner": default_inner, "outline": default_outline}
+		
+	# Sort colors by frequency or popularity
+	color_list.sort_custom(func(a: Color, b: Color):
+		return unique_colors[a] > unique_colors[b]
+	)
+	
+	# Choose the most frequent color as inner/main color
+	var main_color = color_list[0]
+	
+	# For outline: look for a darker color in the list of similar hue, or fallback to darkened main_color
+	var outline_color = main_color.darkened(0.5)
+	
+	# Let's see if we have another color in color_list that has a similar hue but is darker
+	for c in color_list:
+		if c != main_color and c.v < main_color.v and c.s > 0.1:
+			if main_color.v - c.v > 0.15:
+				outline_color = c
+				break
+				
+	return {"inner": main_color, "outline": outline_color}
+
 
 
 
