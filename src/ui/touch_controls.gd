@@ -4,7 +4,7 @@ extends Control
 var joystick_active = false
 var joystick_center = Vector2(120, 500)
 var joystick_pos = Vector2(120, 500)
-const JOYSTICK_MAX_RADIUS = 60.0
+const JOYSTICK_MAX_RADIUS = 120.0
 const JOYSTICK_DEADZONE = 10.0
 var joystick_touch_index = -1
 
@@ -43,14 +43,14 @@ func setup_buttons():
 	var safe_height = view_size.y
 	
 	# Position joystick in bottom-left (relative to the container)
-	joystick_center = Vector2(120, safe_height - 120)
+	joystick_center = Vector2(180, safe_height - 180)
 	joystick_pos = joystick_center
 	
 	# Action buttons in bottom-right (relative to the container)
 	buttons = {
 		"attack": {
-			"center": Vector2(safe_width - 70, safe_height - 70),
-			"radius": 35.0,
+			"center": Vector2(safe_width - 140, safe_height - 140),
+			"radius": 70.0,
 			"color": Color(0.9, 0.2, 0.2, 0.35), # Transparent red
 			"color_pressed": Color(0.9, 0.2, 0.2, 0.7),
 			"action": "attack",
@@ -59,8 +59,8 @@ func setup_buttons():
 			"label": "ATTACK"
 		},
 		"jump": {
-			"center": Vector2(safe_width - 160, safe_height - 70),
-			"radius": 30.0,
+			"center": Vector2(safe_width - 320, safe_height - 140),
+			"radius": 60.0,
 			"color": Color(0.2, 0.6, 0.9, 0.35), # Transparent blue
 			"color_pressed": Color(0.2, 0.6, 0.9, 0.7),
 			"action": "jump",
@@ -69,8 +69,8 @@ func setup_buttons():
 			"label": "JUMP"
 		},
 		"dash": {
-			"center": Vector2(safe_width - 70, safe_height - 160),
-			"radius": 28.0,
+			"center": Vector2(safe_width - 140, safe_height - 320),
+			"radius": 56.0,
 			"color": Color(0.9, 0.7, 0.1, 0.35), # Transparent yellow
 			"color_pressed": Color(0.9, 0.7, 0.1, 0.7),
 			"action": "dash",
@@ -79,8 +79,8 @@ func setup_buttons():
 			"label": "DASH"
 		},
 		"change_skin": {
-			"center": Vector2(safe_width - 160, safe_height - 160),
-			"radius": 24.0,
+			"center": Vector2(safe_width - 320, safe_height - 320),
+			"radius": 48.0,
 			"color": Color(0.5, 0.8, 0.2, 0.35), # Transparent green
 			"color_pressed": Color(0.5, 0.8, 0.2, 0.7),
 			"action": "change_skin",
@@ -89,8 +89,8 @@ func setup_buttons():
 			"label": "SKIN"
 		},
 		"change_weapon": {
-			"center": Vector2(safe_width - 240, safe_height - 160),
-			"radius": 24.0,
+			"center": Vector2(safe_width - 480, safe_height - 320),
+			"radius": 48.0,
 			"color": Color(0.2, 0.8, 0.8, 0.35), # Transparent cyan
 			"color_pressed": Color(0.2, 0.8, 0.8, 0.7),
 			"action": "change_weapon",
@@ -280,8 +280,8 @@ func _draw():
 	draw_circle(joystick_center, JOYSTICK_MAX_RADIUS, Color(1.0, 1.0, 1.0, 0.25), false, 2.0)
 	
 	# Draw joystick knob circle
-	draw_circle(joystick_pos, 22.0, Color(0.8, 0.8, 0.8, 0.55))
-	draw_circle(joystick_pos, 22.0, Color(1.0, 1.0, 1.0, 0.4), false, 1.0)
+	draw_circle(joystick_pos, 44.0, Color(0.8, 0.8, 0.8, 0.55))
+	draw_circle(joystick_pos, 44.0, Color(1.0, 1.0, 1.0, 0.4), false, 2.0)
 	
 	# Draw action buttons
 	for b_name in buttons.keys():
@@ -295,6 +295,6 @@ func _draw():
 		
 		# Draw label text inside circle
 		var font = get_theme_font("font")
-		var font_size = 10
+		var font_size = 20
 		var label_size = font.get_string_size(btn.label, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
-		draw_string(font, btn.center - label_size / 2.0 + Vector2(0, 3.5), btn.label, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, Color(1, 1, 1, 0.85))
+		draw_string(font, btn.center - label_size / 2.0 + Vector2(0, 7.0), btn.label, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, Color(1, 1, 1, 0.85))

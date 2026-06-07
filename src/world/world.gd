@@ -286,7 +286,8 @@ func generate_level():
 		tile_map.set_cell(0, Vector2i(x, 7), 1, Vector2i(3, 0))
 	# Left Wall:
 	for y in range(0, 7):
-		tile_map.set_cell(0, Vector2i(86, y), 1, Vector2i(3, 0))
+		if y != 5 and y != 6:
+			tile_map.set_cell(0, Vector2i(86, y), 1, Vector2i(3, 0))
 	# Intermediate Castle Floors:
 	# Floor 1 (Planks) at y = 4 (from x = 87 to 102)
 	for x in range(87, 103):

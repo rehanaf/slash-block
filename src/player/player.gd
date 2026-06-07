@@ -262,7 +262,8 @@ func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	else:
-		jumps_left = MAX_JUMPS
+		if velocity.y >= 0:
+			jumps_left = MAX_JUMPS
 		
 	# Check sneak state (only on floor and when not attacking)
 	is_sneaking = Input.is_action_pressed("sneak") and is_on_floor() and attack_cooldown <= 0
