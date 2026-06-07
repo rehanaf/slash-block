@@ -259,7 +259,10 @@ func _physics_process(delta):
 		return
 
 	# Add gravity
-	if not is_on_floor():
+	if attack_cooldown > 0 and not is_on_floor():
+		# Freeze vertical motion while attacking in air
+		velocity.y = 0
+	elif not is_on_floor():
 		velocity.y += gravity * delta
 	else:
 		if velocity.y >= 0:
@@ -341,7 +344,17 @@ func start_dash():
 		dash_effect.play_dash(DASH_DURATION, colors.inner, colors.inner)
 
 
+var air_attack_counter = 0  # counts attacks while in air
+
 func trigger_attack():
+	# If airborne, limit to 2 attacks
+	if not is_on_floor():
+		air_attack_counter += 1
+		if air_attack_counter > 2:
+			return  # exceed limit, do not attack
+	else:
+		air_attack_counter = 0  # reset when on ground
+
 	# Decide next combo step
 	if combo_step == 0 or combo_reset_timer <= 0:
 		combo_step = 1
