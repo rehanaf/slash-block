@@ -78,8 +78,38 @@ jobs:
         run: |
           godot --headless --export-release "iOS" build/ios/xcode_project
 
-      - name: Upload Build Artifacts
+      - name: Upload Windows Build
         uses: actions/upload-artifact@v4
         with:
-          name: slash-block-builds
-          path: build/
+          name: slash-block-windows
+          path: build/windows/
+
+      - name: Upload Linux Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: slash-block-linux
+          path: build/linux/
+
+      - name: Upload macOS Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: slash-block-mac
+          path: build/mac/
+
+      - name: Upload Web Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: slash-block-web
+          path: build/web/
+
+      - name: Upload Android Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: slash-block-android
+          path: build/android/
+
+      - name: Upload iOS Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: slash-block-ios
+          path: build/ios/
