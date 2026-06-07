@@ -938,6 +938,7 @@ func apply_weapon(index: int):
 			var sword_node = $FlippedContainer/Bones/Bone_Body/Bone_RightArm/Bone_Sword/Sword
 			if sword_node:
 				sword_node.texture = tex
+				sword_node.scale = Vector2(0.5, 0.5)
 		weapon_changed.emit(weapon_data.name)
 
 func cycle_weapon():

@@ -59,7 +59,7 @@ func setup_buttons():
 			"label": "ATTACK"
 		},
 		"jump": {
-			"center": Vector2(safe_width - 320, safe_height - 140),
+			"center": Vector2(safe_width - 140, safe_height - 320),
 			"radius": 60.0,
 			"color": Color(0.2, 0.6, 0.9, 0.35), # Transparent blue
 			"color_pressed": Color(0.2, 0.6, 0.9, 0.7),
@@ -69,7 +69,7 @@ func setup_buttons():
 			"label": "JUMP"
 		},
 		"dash": {
-			"center": Vector2(safe_width - 140, safe_height - 320),
+			"center": Vector2(safe_width - 320, safe_height - 140),
 			"radius": 56.0,
 			"color": Color(0.9, 0.7, 0.1, 0.35), # Transparent yellow
 			"color_pressed": Color(0.9, 0.7, 0.1, 0.7),
@@ -77,26 +77,6 @@ func setup_buttons():
 			"pressed": false,
 			"touch_index": -1,
 			"label": "DASH"
-		},
-		"change_skin": {
-			"center": Vector2(safe_width - 320, safe_height - 320),
-			"radius": 48.0,
-			"color": Color(0.5, 0.8, 0.2, 0.35), # Transparent green
-			"color_pressed": Color(0.5, 0.8, 0.2, 0.7),
-			"action": "change_skin",
-			"pressed": false,
-			"touch_index": -1,
-			"label": "SKIN"
-		},
-		"change_weapon": {
-			"center": Vector2(safe_width - 480, safe_height - 320),
-			"radius": 48.0,
-			"color": Color(0.2, 0.8, 0.8, 0.35), # Transparent cyan
-			"color_pressed": Color(0.2, 0.8, 0.8, 0.7),
-			"action": "change_weapon",
-			"pressed": false,
-			"touch_index": -1,
-			"label": "WEAPON"
 		}
 	}
 	queue_redraw()
