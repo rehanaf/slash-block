@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ditmkuehgm7s3"
-path="res://.godot/imported/rightLeg.png-5f56ffbd0aeb7ce924fa387ad2aef310.ctex"
+uid="uid://sxtmuwq8al13"
+path="res://.godot/imported/steve.png-570226ed2285c4e6b36e6daefafae2fc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/skin/dream/rightLeg.png"
-dest_files=["res://.godot/imported/rightLeg.png-5f56ffbd0aeb7ce924fa387ad2aef310.ctex"]
+source_file="res://assets/entity/characters/steve.png"
+dest_files=["res://.godot/imported/steve.png-570226ed2285c4e6b36e6daefafae2fc.ctex"]
 
 [params]
 

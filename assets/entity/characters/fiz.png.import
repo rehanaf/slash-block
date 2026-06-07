@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5cxbtmyxiw2b"
-path="res://.godot/imported/rightLeg.png-f5929f180a6b68d7941b86dda6b3efb1.ctex"
+uid="uid://bndebeu4ne5sn"
+path="res://.godot/imported/fiz.png-b3131b374d275e2b2a45870ad800ccc9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/skin/captenpanez/rightLeg.png"
-dest_files=["res://.godot/imported/rightLeg.png-f5929f180a6b68d7941b86dda6b3efb1.ctex"]
+source_file="res://assets/entity/characters/fiz.png"
+dest_files=["res://.godot/imported/fiz.png-b3131b374d275e2b2a45870ad800ccc9.ctex"]
 
 [params]
 

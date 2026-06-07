@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://e72yg51wbwux"
-path="res://.godot/imported/leftLeg.png-a6072601a6a83b27a37084df800597ab.ctex"
+uid="uid://c5jfrh5idpcjg"
+path="res://.godot/imported/captenpanez.png-ad2a1ddce8c329428f4f269460b91911.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/enemy/zombie/leftLeg.png"
-dest_files=["res://.godot/imported/leftLeg.png-a6072601a6a83b27a37084df800597ab.ctex"]
+source_file="res://assets/entity/characters/captenpanez.png"
+dest_files=["res://.godot/imported/captenpanez.png-ad2a1ddce8c329428f4f269460b91911.ctex"]
 
 [params]
 

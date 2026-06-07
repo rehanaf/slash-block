@@ -405,22 +405,39 @@ func cycle_skin():
 	spawn_skin_particles()
 
 func apply_skin(skin_name: String):
-	var base_path = "res://assets/skin/" + skin_name + "/"
+	var skin_path = "res://assets/entity/characters/" + skin_name + ".png"
+	var skin_tex = load(skin_path)
+	if not skin_tex:
+		push_error("Failed to load skin sheet: " + skin_path)
+		return
+		
+	var is_old_format = (skin_tex.get_height() == 32)
 	
-	# Verify we can load textures
-	var head_tex = load(base_path + "head.png")
-	var body_tex = load(base_path + "body.png")
-	var l_arm_tex = load(base_path + "leftArm.png")
-	var r_arm_tex = load(base_path + "rightArm.png")
-	var l_leg_tex = load(base_path + "leftLeg.png")
-	var r_leg_tex = load(base_path + "rightLeg.png")
+	# Option B (Pure Side-View coordinates)
+	var regions = {
+		"Head": Rect2(0, 8, 8, 8),
+		"Body": Rect2(16, 20, 4, 12),
+		"RightArm": Rect2(40, 20, 4, 12),
+		"LeftArm": Rect2(40, 20, 4, 12) if is_old_format else Rect2(32, 52, 4, 12),
+		"RightLeg": Rect2(0, 20, 4, 12),
+		"LeftLeg": Rect2(0, 20, 4, 12) if is_old_format else Rect2(16, 52, 4, 12)
+	}
 	
-	if head_tex: $FlippedContainer/Bones/Bone_Body/Bone_Head/Head.texture = head_tex
-	if body_tex: $FlippedContainer/Bones/Bone_Body/Body.texture = body_tex
-	if l_arm_tex: $FlippedContainer/Bones/Bone_Body/Bone_LeftArm/LeftArm.texture = l_arm_tex
-	if r_arm_tex: $FlippedContainer/Bones/Bone_Body/Bone_RightArm/RightArm.texture = r_arm_tex
-	if l_leg_tex: $FlippedContainer/Bones/Bone_LeftLeg/LeftLeg.texture = l_leg_tex
-	if r_leg_tex: $FlippedContainer/Bones/Bone_RightLeg/RightLeg.texture = r_leg_tex
+	var sprites = {
+		"Head": $FlippedContainer/Bones/Bone_Body/Bone_Head/Head,
+		"Body": $FlippedContainer/Bones/Bone_Body/Body,
+		"RightArm": $FlippedContainer/Bones/Bone_Body/Bone_RightArm/RightArm,
+		"LeftArm": $FlippedContainer/Bones/Bone_Body/Bone_LeftArm/LeftArm,
+		"RightLeg": $FlippedContainer/Bones/Bone_RightLeg/RightLeg,
+		"LeftLeg": $FlippedContainer/Bones/Bone_LeftLeg/LeftLeg
+	}
+	
+	for part_name in sprites.keys():
+		var sprite = sprites[part_name]
+		if sprite:
+			sprite.texture = skin_tex
+			sprite.region_enabled = true
+			sprite.region_rect = regions[part_name]
 
 
 func animate_procedurally(delta):

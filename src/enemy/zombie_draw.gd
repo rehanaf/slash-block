@@ -11,8 +11,23 @@ var is_moving: bool = false
 var anim_time: float = 0.0
 
 func _ready():
-	# Build the zombie body parts dynamically using assets/enemy/zombie/
-	var base_path = "res://assets/enemy/zombie/"
+	var skin_path = "res://assets/entity/zombie/zombie.png"
+	var skin_tex = load(skin_path)
+	if not skin_tex:
+		push_error("Failed to load zombie skin: " + skin_path)
+		return
+		
+	var is_old_format = (skin_tex.get_height() == 32)
+	
+	# Option B (Pure Side-View coordinates)
+	var regions = {
+		"Head": Rect2(0, 8, 8, 8),
+		"Body": Rect2(16, 20, 4, 12),
+		"RightArm": Rect2(40, 20, 4, 12),
+		"LeftArm": Rect2(40, 20, 4, 12) if is_old_format else Rect2(32, 52, 4, 12),
+		"RightLeg": Rect2(0, 20, 4, 12),
+		"LeftLeg": Rect2(0, 20, 4, 12) if is_old_format else Rect2(16, 52, 4, 12)
+	}
 	
 	# Enable nearest texture filtering for crisp pixel art
 	texture_filter = TEXTURE_FILTER_NEAREST
@@ -24,7 +39,9 @@ func _ready():
 	left_arm_pivot.rotation = -1.5708
 	
 	var left_arm = Sprite2D.new()
-	left_arm.texture = load(base_path + "leftArm.png")
+	left_arm.texture = skin_tex
+	left_arm.region_enabled = true
+	left_arm.region_rect = regions["LeftArm"]
 	left_arm.position = Vector2(0, 4)
 	left_arm.z_index = -2
 	left_arm_pivot.add_child(left_arm)
@@ -35,7 +52,9 @@ func _ready():
 	left_leg_pivot.position = Vector2(0, 6)
 	
 	var left_leg = Sprite2D.new()
-	left_leg.texture = load(base_path + "leftLeg.png")
+	left_leg.texture = skin_tex
+	left_leg.region_enabled = true
+	left_leg.region_rect = regions["LeftLeg"]
 	left_leg.position = Vector2(0, 5)
 	left_leg.z_index = -1
 	left_leg_pivot.add_child(left_leg)
@@ -46,7 +65,9 @@ func _ready():
 	body_pivot.position = Vector2(0, 0)
 	
 	var body = Sprite2D.new()
-	body.texture = load(base_path + "body.png")
+	body.texture = skin_tex
+	body.region_enabled = true
+	body.region_rect = regions["Body"]
 	body.position = Vector2(0, 0)
 	body.z_index = 0
 	body_pivot.add_child(body)
@@ -57,7 +78,9 @@ func _ready():
 	right_leg_pivot.position = Vector2(0, 6)
 	
 	var right_leg = Sprite2D.new()
-	right_leg.texture = load(base_path + "rightLeg.png")
+	right_leg.texture = skin_tex
+	right_leg.region_enabled = true
+	right_leg.region_rect = regions["RightLeg"]
 	right_leg.position = Vector2(0, 5)
 	right_leg.z_index = 1
 	right_leg_pivot.add_child(right_leg)
@@ -69,7 +92,9 @@ func _ready():
 	right_arm_pivot.rotation = -1.5708
 	
 	var right_arm = Sprite2D.new()
-	right_arm.texture = load(base_path + "rightArm.png")
+	right_arm.texture = skin_tex
+	right_arm.region_enabled = true
+	right_arm.region_rect = regions["RightArm"]
 	right_arm.position = Vector2(0, 4)
 	right_arm.z_index = 2
 	right_arm_pivot.add_child(right_arm)
@@ -80,7 +105,9 @@ func _ready():
 	head_pivot.position = Vector2(0, -6)
 	
 	var head = Sprite2D.new()
-	head.texture = load(base_path + "head.png")
+	head.texture = skin_tex
+	head.region_enabled = true
+	head.region_rect = regions["Head"]
 	head.position = Vector2(0, -4)
 	head.z_index = 0
 	head_pivot.add_child(head)
