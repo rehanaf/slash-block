@@ -18,14 +18,15 @@ var selected_idx = 0
 
 # Background elements
 var clouds = []
+var stars = []
 var time = 0.0
 
 func _ready():
 	# 1. Setup Input Map just in case (reset, escape, etc.)
 	setup_menu_inputs()
 	
-	# Set background color to sky blue
-	RenderingServer.set_default_clear_color(Color(0.5, 0.7, 1.0))
+	# Set background color to midnight night sky
+	RenderingServer.set_default_clear_color(Color(0.04, 0.05, 0.11))
 	
 	# 2. Spawn player preview
 	spawn_preview_player()
@@ -45,12 +46,22 @@ func _ready():
 		get_tree().root.size_changed.connect(adjust_menu_safe_area)
 	adjust_menu_safe_area()
 	
-	# Create some clouds for the background
+	# Create some moonlit clouds for the background
 	for i in range(5):
 		clouds.append({
 			"pos": Vector2(randf_range(0, 1152), randf_range(40, 200)),
-			"speed": randf_range(10, 25),
+			"speed": randf_range(5, 15),
 			"size": Vector2(randf_range(60, 120), randf_range(20, 40))
+		})
+	
+	# Create stars for the night sky
+	for i in range(40):
+		stars.append({
+			"pos": Vector2(randf_range(0, 1152), randf_range(10, 320)),
+			"brightness": randf_range(0.3, 1.0),
+			"twinkle_speed": randf_range(1.5, 4.0),
+			"twinkle_offset": randf_range(0, TAU),
+			"size": 1.0 if randf() > 0.2 else 2.0
 		})
 
 func adjust_menu_safe_area():
@@ -131,10 +142,16 @@ func _process(delta):
 	queue_redraw()
 
 func _draw():
-	# Draw background clouds
+	# Draw twinkling stars
+	for s in stars:
+		var twinkle = (sin(time * s.twinkle_speed + s.twinkle_offset) + 1.0) * 0.5
+		var alpha = s.brightness * (0.4 + twinkle * 0.6)
+		var star_color = Color(0.9, 0.92, 1.0, alpha)
+		draw_rect(Rect2(s.pos, Vector2(s.size, s.size)), star_color)
+	
+	# Draw background clouds (moonlit, semi-transparent)
 	for c in clouds:
-		# Draw pixel clouds (simple gray-white blocks)
-		var color = Color(1.0, 1.0, 1.0, 0.45)
+		var color = Color(0.5, 0.55, 0.7, 0.12)
 		draw_rect(Rect2(c.pos, c.size), color)
 		draw_rect(Rect2(c.pos + Vector2(10, -10), c.size - Vector2(20, 0)), color)
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://cx6g0f0d2k1m1"]
 
 [ext_resource type="Script" path="res://src/enemy/enemy.gd" id="1_1"]
-[ext_resource type="Script" path="res://src/enemy/zombie_draw.gd" id="2_2"]
+[ext_resource type="Script" path="res://src/enemy/enemy_draw.gd" id="2_2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
 size = Vector2(8, 31)

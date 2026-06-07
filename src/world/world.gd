@@ -57,8 +57,8 @@ func _ready():
 	# 5. Place floating tutorial labels in the world
 	place_tutorial_labels()
 	
-	# Set background color to Minecraft sky blue
-	RenderingServer.set_default_clear_color(Color(0.5, 0.7, 1.0))
+	# Set background color to midnight night sky
+	RenderingServer.set_default_clear_color(Color(0.04, 0.05, 0.11))
 	
 	# 6. Adjust HUD positioning based on 16:9 safe area
 	$CanvasLayer/HUD.resized.connect(adjust_hud_safe_area)
@@ -323,24 +323,25 @@ func spawn_player():
 
 
 func spawn_enemies():
-	# Strategic Enemy spawns:
-	# Enemy 1: Ground near spawn
-	spawn_enemy_at(Vector2(14 * BLOCK_SIZE, 8 * BLOCK_SIZE - 20))
-	# Enemy 2: On Platform 2 (brick)
-	spawn_enemy_at(Vector2(22 * BLOCK_SIZE, 4 * BLOCK_SIZE - 20))
-	# Enemy 3: Inside the underground cave
-	spawn_enemy_at(Vector2(7 * BLOCK_SIZE, 15 * BLOCK_SIZE - 20))
-	# Enemy 4: On the sky island
-	spawn_enemy_at(Vector2(58 * BLOCK_SIZE, -8 * BLOCK_SIZE - 20))
-	# Enemy 5: Castle ground level
-	spawn_enemy_at(Vector2(95 * BLOCK_SIZE, 7 * BLOCK_SIZE - 20))
-	# Enemy 6: Castle intermediate planks floor
-	spawn_enemy_at(Vector2(101 * BLOCK_SIZE, 4 * BLOCK_SIZE - 20))
-	# Enemy 7: Castle upper planks floor
-	spawn_enemy_at(Vector2(104 * BLOCK_SIZE, 1 * BLOCK_SIZE - 20))
+	# Strategic Enemy spawns with mixed types:
+	# Enemy 1: Ground near spawn - Zombie
+	spawn_enemy_at(Vector2(14 * BLOCK_SIZE, 8 * BLOCK_SIZE - 20), "zombie")
+	# Enemy 2: On Platform 2 (brick) - Skeleton
+	spawn_enemy_at(Vector2(22 * BLOCK_SIZE, 4 * BLOCK_SIZE - 20), "skeleton")
+	# Enemy 3: Inside the underground cave - Creeper
+	spawn_enemy_at(Vector2(7 * BLOCK_SIZE, 15 * BLOCK_SIZE - 20), "creeper")
+	# Enemy 4: On the sky island - Skeleton
+	spawn_enemy_at(Vector2(58 * BLOCK_SIZE, -8 * BLOCK_SIZE - 20), "skeleton")
+	# Enemy 5: Castle ground level - Creeper
+	spawn_enemy_at(Vector2(95 * BLOCK_SIZE, 7 * BLOCK_SIZE - 20), "creeper")
+	# Enemy 6: Castle intermediate planks floor - Zombie
+	spawn_enemy_at(Vector2(101 * BLOCK_SIZE, 4 * BLOCK_SIZE - 20), "zombie")
+	# Enemy 7: Castle upper planks floor - Skeleton
+	spawn_enemy_at(Vector2(104 * BLOCK_SIZE, 1 * BLOCK_SIZE - 20), "skeleton")
 
-func spawn_enemy_at(pos: Vector2):
+func spawn_enemy_at(pos: Vector2, type: String = "zombie"):
 	var enemy_inst = enemy_scene.instantiate()
+	enemy_inst.enemy_type = type
 	enemy_inst.process_mode = PROCESS_MODE_PAUSABLE
 	enemy_inst.position = pos
 	add_child(enemy_inst)
@@ -349,7 +350,7 @@ func place_tutorial_labels():
 	create_world_label("<- Starter Cabin", Vector2(-6 * BLOCK_SIZE, 3 * BLOCK_SIZE))
 	create_world_label("Underground Cave Entrance v", Vector2(1 * BLOCK_SIZE, 7 * BLOCK_SIZE))
 	create_world_label("Climb Brick Tower ->", Vector2(41 * BLOCK_SIZE, 7 * BLOCK_SIZE))
-	create_world_label("Sky Island (Zombies!)", Vector2(50 * BLOCK_SIZE, -9.5 * BLOCK_SIZE))
+	create_world_label("Sky Island (Skeletons!)", Vector2(50 * BLOCK_SIZE, -9.5 * BLOCK_SIZE))
 	create_world_label("Lava Void Pit (Jump/Dash!)", Vector2(70 * BLOCK_SIZE, 6.5 * BLOCK_SIZE))
 	create_world_label("Cobblestone Ruins / Castle", Vector2(85 * BLOCK_SIZE, 6.0 * BLOCK_SIZE))
 
