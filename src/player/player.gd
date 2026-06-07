@@ -319,7 +319,14 @@ func trigger_attack():
 	
 	# Trigger slash graphic effect
 	if slash_effect:
-		slash_effect.play_slash(combo_step)
+		var skin_colors = {
+			"captenpanez": Color(1.0, 0.25, 0.1),
+			"steve": Color(0.2, 0.65, 1.0),
+			"dream": Color(0.25, 0.85, 0.25),
+			"fiz": Color(0.75, 0.2, 0.95)
+		}
+		var skin_color = skin_colors.get(skins[current_skin_index], Color(0.2, 0.65, 1.0))
+		slash_effect.play_slash(combo_step, skin_color)
 		
 	# Detect hits in Area2D
 	check_attack_collisions()
