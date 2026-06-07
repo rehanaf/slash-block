@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://src/enemy/enemy_draw.gd" id="2_2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
-size = Vector2(8, 31)
+size = Vector2(8, 16)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
 bg_color = Color(0.2, 0.2, 0.2, 0.6)
@@ -28,7 +28,7 @@ collision_mask = 1
 script = ExtResource("1_1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 1.5)
+position = Vector2(0, -2)
 shape = SubResource("RectangleShape2D_1")
 
 [node name="Visual" type="Node2D" parent="."]
@@ -39,9 +39,9 @@ script = ExtResource("2_2")
 z_index = 5
 texture_filter = 1
 offset_left = -8.0
-offset_top = -20.0
+offset_top = -12.0
 offset_right = 8.0
-offset_bottom = -17.0
+offset_bottom = -9.0
 theme_override_styles/background = SubResource("StyleBoxFlat_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_fill")
 value = 100.0

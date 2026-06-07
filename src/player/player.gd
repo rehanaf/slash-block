@@ -179,7 +179,7 @@ func _process(delta):
 		anim_time += delta
 		var bob = sin(anim_time * 4.0) * 0.4
 		bone_body.position.y = body_original_y + bob
-		bone_head.position.y = -6.0 + bob * 0.5
+		bone_head.position.y = -2.0 + bob * 0.5
 		bone_head.rotation = sin(anim_time * 2.0) * 0.02
 		
 		bone_left_arm.rotation = -0.15 + sin(anim_time * 2.0) * 0.04
@@ -187,11 +187,11 @@ func _process(delta):
 		
 		bone_left_leg.rotation = -0.1
 		bone_right_leg.rotation = 0.1
-		bone_left_leg.position = Vector2(0.0, 6.0 - bob * 0.2)
-		bone_right_leg.position = Vector2(0.0, 6.0 - bob * 0.2)
+		bone_left_leg.position = Vector2(0.0, 2.0 - bob * 0.2)
+		bone_right_leg.position = Vector2(0.0, 2.0 - bob * 0.2)
 		
 		bone_sword.rotation = lerp_angle(bone_sword.rotation, 0.0, 15.0 * delta)
-		bone_sword.position = lerp(bone_sword.position, Vector2(0, 10.0), 15.0 * delta)
+		bone_sword.position = lerp(bone_sword.position, Vector2(0, 5.0), 15.0 * delta)
 		return
 
 	if is_dead:
@@ -413,14 +413,14 @@ func apply_skin(skin_name: String):
 		
 	var is_old_format = (skin_tex.get_height() == 32)
 	
-	# Option B (Pure Side-View coordinates)
+	# Chibi proportions (2x4 body/arms/legs, 8x8 head)
 	var regions = {
 		"Head": Rect2(0, 8, 8, 8),
-		"Body": Rect2(16, 20, 4, 12),
-		"RightArm": Rect2(40, 20, 4, 12),
-		"LeftArm": Rect2(40, 20, 4, 12) if is_old_format else Rect2(32, 52, 4, 12),
-		"RightLeg": Rect2(0, 20, 4, 12),
-		"LeftLeg": Rect2(0, 20, 4, 12) if is_old_format else Rect2(16, 52, 4, 12)
+		"Body": Rect2(16, 20, 2, 4),
+		"RightArm": Rect2(40, 20, 2, 4),
+		"LeftArm": Rect2(40, 20, 2, 4) if is_old_format else Rect2(32, 52, 2, 4),
+		"RightLeg": Rect2(0, 20, 2, 4),
+		"LeftLeg": Rect2(0, 20, 2, 4) if is_old_format else Rect2(16, 52, 2, 4)
 	}
 	
 	var sprites = {
@@ -456,8 +456,8 @@ func animate_procedurally(delta):
 		custom_anim_time = 0.0
 		prev_state = current_state
 	
-	# Default pivot transforms relative to body
-	# Head: (0, -6), Body: (0, 0), Arms: (0, -4), Legs: Left (-1, 6), Right (1, 6)
+	# Default pivot transforms for chibi body
+	# Head: (0, -2), Body: (0, 0), Arms: (0, -2), Legs: (0, 2)
 	
 	# Determine movement state (plays walk animation if keys are pressed, even when blocked by walls)
 	var is_moving = (Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right")) and is_on_floor() and attack_cooldown <= 0
@@ -472,8 +472,8 @@ func animate_procedurally(delta):
 			var bob = sin(anim_time * 4.0) * 0.4
 			if is_sneaking:
 				# Sneak idle: crouched down
-				bone_body.position.y = body_original_y + bob + 3.0
-				bone_head.position.y = -12.0 - bob * 0.5 + 2.0
+				bone_body.position.y = body_original_y + bob + 1.5
+				bone_head.position.y = -2.0 - bob * 0.5 + 1.0
 				bone_head.rotation = sin(anim_time * 2.0) * 0.02
 				
 				# Arms raised/bent slightly
@@ -484,11 +484,11 @@ func animate_procedurally(delta):
 				# Legs bent
 				bone_left_leg.rotation = -0.3
 				bone_right_leg.rotation = 0.3
-				bone_left_leg.position = Vector2(0.0, 4.0)
-				bone_right_leg.position = Vector2(0.0, 4.0)
+				bone_left_leg.position = Vector2(0.0, 1.5)
+				bone_right_leg.position = Vector2(0.0, 1.5)
 			else:
 				bone_body.position.y = body_original_y + bob
-				bone_head.position.y = -12.0 - bob * 0.5
+				bone_head.position.y = -2.0 - bob * 0.5
 				bone_head.rotation = sin(anim_time * 2.0) * 0.02
 
 				# Arms rest slightly open
@@ -499,8 +499,8 @@ func animate_procedurally(delta):
 				# Legs slightly open
 				bone_left_leg.rotation = -0.1
 				bone_right_leg.rotation = 0.1
-				bone_left_leg.position = Vector2(0.0, 6.0 - bob * 0.2)
-				bone_right_leg.position = Vector2(0.0, 6.0 - bob * 0.2)
+				bone_left_leg.position = Vector2(0.0, 2.0 - bob * 0.2)
+				bone_right_leg.position = Vector2(0.0, 2.0 - bob * 0.2)
 		
 	# 2. Walk Animation
 	elif is_moving and not in_air and not is_dashing:
@@ -513,29 +513,29 @@ func animate_procedurally(delta):
 			var bob = abs(sin(cycle)) * 0.8
 			if is_sneaking:
 				# Sneak walking: lower posture and shorter swing
-				bone_body.position.y = body_original_y - bob + 3.4
-				bone_head.position.y = -12.4 + bob * 0.8 + 2.0
+				bone_body.position.y = body_original_y - bob + 1.8
+				bone_head.position.y = -2.0 + bob * 0.8 + 1.0
 				bone_head.rotation = sin(cycle) * 0.03
 				
 				# Legs swing with smaller angle, bent posture
 				bone_left_leg.rotation = sin(cycle) * 0.3 - 0.2
 				bone_right_leg.rotation = -sin(cycle) * 0.3 + 0.2
-				bone_left_leg.position = Vector2(0.0, 4.0)
-				bone_right_leg.position = Vector2(0.0, 4.0)
+				bone_left_leg.position = Vector2(0.0, 1.5)
+				bone_right_leg.position = Vector2(0.0, 1.5)
 				
 				bone_left_arm.rotation = -sin(cycle) * 0.2 - 0.2
 				if attack_cooldown <= 0:
 					bone_right_arm.rotation = sin(cycle) * 0.2 + 0.2
 			else:
-				bone_body.position.y = body_original_y - bob + 0.4
-				bone_head.position.y = -12.4 + bob * 0.8
+				bone_body.position.y = body_original_y - bob + 0.2
+				bone_head.position.y = -2.0 + bob * 0.8
 				bone_head.rotation = sin(cycle) * 0.03
 				
 				# Legs swing back and forth
 				bone_left_leg.rotation = sin(cycle) * 0.6
 				bone_right_leg.rotation = -sin(cycle) * 0.6
-				bone_left_leg.position = Vector2(0.0, 6.0)
-				bone_right_leg.position = Vector2(0.0, 6.0)
+				bone_left_leg.position = Vector2(0.0, 2.0)
+				bone_right_leg.position = Vector2(0.0, 2.0)
 				
 				# Left arm swings in opposition to left leg
 				bone_left_arm.rotation = -sin(cycle) * 0.4
@@ -546,7 +546,7 @@ func animate_procedurally(delta):
 	# 3. Jump/In Air Pose
 	elif in_air and not is_dashing:
 		bone_body.position.y = body_original_y
-		bone_head.position.y = -12.0
+		bone_head.position.y = -2.0
 		
 		# Lean head slightly up/down based on vertical speed
 		bone_head.rotation = clamp(velocity.y * 0.002, -0.2, 0.2)
@@ -563,8 +563,8 @@ func animate_procedurally(delta):
 	# 4. Dash Pose
 	elif is_dashing:
 		# Body leans forward sharply
-		bone_body.position.y = body_original_y + 1.0
-		bone_head.position.y = -12.0
+		bone_body.position.y = body_original_y + 0.5
+		bone_head.position.y = -2.0
 		bone_head.rotation = 0.25
 
 		
@@ -610,7 +610,7 @@ func animate_procedurally(delta):
 			pass
 		else:
 			bone_sword.rotation = lerp_angle(bone_sword.rotation, 0.7854, 15.0 * delta)
-			bone_sword.position = lerp(bone_sword.position, Vector2(0, 10.0), 15.0 * delta)
+			bone_sword.position = lerp(bone_sword.position, Vector2(0, 5.0), 15.0 * delta)
 	else:
 		if custom_animations.has("attack"):
 			pass
@@ -618,7 +618,7 @@ func animate_procedurally(delta):
 			# During attack, bend sword forward to align with swing direction relative to its +45 deg base
 			var target_sword_rot = 1.08 if combo_step != 2 else 0.48
 			bone_sword.rotation = lerp_angle(bone_sword.rotation, target_sword_rot, 25.0 * delta)
-			bone_sword.position = lerp(bone_sword.position, Vector2(0, 10.0), 25.0 * delta)
+			bone_sword.position = lerp(bone_sword.position, Vector2(0, 5.0), 25.0 * delta)
 
 # Ease function for snappy swing animations
 func ease_out_cubic(x: float) -> float:
@@ -627,7 +627,7 @@ func ease_out_cubic(x: float) -> float:
 # Visual effects spawners
 func spawn_jump_particles():
 	if get_parent() and get_parent().has_method("create_particles"):
-		get_parent().create_particles(global_position + Vector2(0, 16), Color(0.9, 0.9, 0.9, 0.6), 8)
+		get_parent().create_particles(global_position + Vector2(0, 6), Color(0.9, 0.9, 0.9, 0.6), 8)
 
 func spawn_skin_particles():
 	if get_parent() and get_parent().has_method("create_particles"):
@@ -778,12 +778,12 @@ func apply_custom_pose(pose: Dictionary):
 	# Base position mapping
 	var base_positions = {
 		"body": Vector2(0, body_original_y),
-		"head": Vector2(0, -12),
-		"left_arm": Vector2(0, -10),
-		"right_arm": Vector2(0, -10),
-		"left_leg": Vector2(0, 6),
-		"right_leg": Vector2(0, 6),
-		"sword": Vector2(0, 10)
+		"head": Vector2(0, -2),
+		"left_arm": Vector2(0, -2),
+		"right_arm": Vector2(0, -2),
+		"left_leg": Vector2(0, 2),
+		"right_leg": Vector2(0, 2),
+		"sword": Vector2(0, 5)
 	}
 	
 	for bone_name in base_positions.keys():
@@ -904,7 +904,7 @@ func die():
 	# Display "YOU DIED" text
 	var label = Label.new()
 	label.text = "YOU DIED"
-	label.scale = Vector2(0.6, 0.6)
+	label.scale = Vector2(0.4, 0.4)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.position = global_position + Vector2(-36, -30)
 	label.add_theme_color_override("font_color", Color(0.9, 0.1, 0.1))

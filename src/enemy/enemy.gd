@@ -279,7 +279,7 @@ func spawn_damage_text(amount: int):
 	var label = Label.new()
 	label.text = str(amount)
 	# Custom style for damage text
-	label.scale = Vector2(0.4, 0.4) # Since camera zoom is 2.5x
+	label.scale = Vector2(0.25, 0.25) # Since camera zoom is 4x
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.position = global_position + Vector2(-10, -20) + Vector2(randf_range(-5, 5), randf_range(-5, 2))
 	
@@ -300,7 +300,7 @@ func spawn_damage_text(amount: int):
 func spawn_respawn_text():
 	var label = Label.new()
 	label.text = "RESPAWN!"
-	label.scale = Vector2(0.3, 0.3)
+	label.scale = Vector2(0.2, 0.2)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.position = global_position + Vector2(-20, -25)
 	label.add_theme_color_override("font_color", Color(0.2, 1, 0.2))

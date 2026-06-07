@@ -357,7 +357,7 @@ func place_tutorial_labels():
 func create_world_label(txt: String, pos: Vector2):
 	var l = Label.new()
 	l.text = txt
-	l.scale = Vector2(0.32, 0.32) # crisp text when scaled up by camera
+	l.scale = Vector2(0.2, 0.2) # crisp text when scaled up by camera
 	l.position = pos
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	l.add_theme_color_override("font_color", Color(1, 1, 1, 0.85))

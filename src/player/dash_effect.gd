@@ -44,8 +44,8 @@ func _process(delta):
 		# Sample current body position
 		if bone_body:
 			# Define base and tip offsets relative to Bone_Body in local space (full character height)
-			var body_base_offset = Vector2(0, 14)  # Foot level
-			var body_tip_offset = Vector2(0, -18) # Head level
+			var body_base_offset = Vector2(0, 6)  # Foot level
+			var body_tip_offset = Vector2(0, -10) # Head level
 			
 			var global_base = bone_body.to_global(body_base_offset)
 			var global_tip = bone_body.to_global(body_tip_offset)
@@ -62,6 +62,9 @@ func _process(delta):
 			})
 			
 	queue_redraw()
+
+func is_degenerate(a: Vector2, b: Vector2, c: Vector2) -> bool:
+	return abs((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)) < 0.01
 
 func _draw():
 	if trail_points.size() < 2:
@@ -100,21 +103,26 @@ func _draw():
 		var mid2 = p2.base.lerp(p2.tip, 0.5)
 		
 		# Part 1 (Base to Mid):
-		draw_polygon(
-			PackedVector2Array([p1.base, mid1, mid2]),
-			PackedColorArray([col_inner1, col_mid1, col_mid2])
-		)
-		draw_polygon(
-			PackedVector2Array([p1.base, mid2, p2.base]),
-			PackedColorArray([col_inner1, col_mid2, col_inner2])
-		)
+		if not is_degenerate(p1.base, mid1, mid2):
+			draw_polygon(
+				PackedVector2Array([p1.base, mid1, mid2]),
+				PackedColorArray([col_inner1, col_mid1, col_mid2])
+			)
+		if not is_degenerate(p1.base, mid2, p2.base):
+			draw_polygon(
+				PackedVector2Array([p1.base, mid2, p2.base]),
+				PackedColorArray([col_inner1, col_mid2, col_inner2])
+			)
 		
 		# Part 2 (Mid to Tip):
-		draw_polygon(
-			PackedVector2Array([mid1, p1.tip, p2.tip]),
-			PackedColorArray([col_mid1, col_outer1, col_outer2])
-		)
-		draw_polygon(
-			PackedVector2Array([mid1, p2.tip, mid2]),
-			PackedColorArray([col_mid1, col_outer2, col_mid2])
-		)
+		if not is_degenerate(mid1, p1.tip, p2.tip):
+			draw_polygon(
+				PackedVector2Array([mid1, p1.tip, p2.tip]),
+				PackedColorArray([col_mid1, col_outer1, col_outer2])
+			)
+		if not is_degenerate(mid1, p2.tip, mid2):
+			draw_polygon(
+				PackedVector2Array([mid1, p2.tip, mid2]),
+				PackedColorArray([col_mid1, col_outer2, col_mid2])
+			)
+

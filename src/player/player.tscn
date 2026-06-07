@@ -7,7 +7,7 @@
 
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
-size = Vector2(8, 31)
+size = Vector2(8, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2"]
 size = Vector2(32, 32)
@@ -17,7 +17,7 @@ collision_layer = 2
 script = ExtResource("1_1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 1.5)
+position = Vector2(0, -2)
 shape = SubResource("RectangleShape2D_1")
 
 [node name="FlippedContainer" type="Node2D" parent="."]
@@ -25,41 +25,41 @@ shape = SubResource("RectangleShape2D_1")
 [node name="Bones" type="Node2D" parent="FlippedContainer"]
 
 [node name="Bone_LeftLeg" type="Node2D" parent="FlippedContainer/Bones"]
-position = Vector2(0, 6)
+position = Vector2(0, 2)
 
 [node name="LeftLeg" type="Sprite2D" parent="FlippedContainer/Bones/Bone_LeftLeg"]
 z_index = -1
-position = Vector2(0, 5)
+position = Vector2(0, 2)
 
 [node name="Bone_RightLeg" type="Node2D" parent="FlippedContainer/Bones"]
-position = Vector2(0, 6)
+position = Vector2(0, 2)
 
 [node name="RightLeg" type="Sprite2D" parent="FlippedContainer/Bones/Bone_RightLeg"]
 z_index = 1
-position = Vector2(0, 5)
+position = Vector2(0, 2)
 
 [node name="Bone_Body" type="Node2D" parent="FlippedContainer/Bones"]
-position = Vector2(0, 6)
+position = Vector2(0, 0)
 
 [node name="Body" type="Sprite2D" parent="FlippedContainer/Bones/Bone_Body"]
-position = Vector2(0, -6)
+position = Vector2(0, 0)
 
 [node name="Bone_LeftArm" type="Node2D" parent="FlippedContainer/Bones/Bone_Body"]
-position = Vector2(0, -10)
+position = Vector2(0, -2)
 
 [node name="LeftArm" type="Sprite2D" parent="FlippedContainer/Bones/Bone_Body/Bone_LeftArm"]
 z_index = -2
-position = Vector2(0, 4)
+position = Vector2(0, 2)
 
 [node name="Bone_RightArm" type="Node2D" parent="FlippedContainer/Bones/Bone_Body"]
-position = Vector2(0, -10)
+position = Vector2(0, -2)
 
 [node name="RightArm" type="Sprite2D" parent="FlippedContainer/Bones/Bone_Body/Bone_RightArm"]
 z_index = 2
-position = Vector2(0, 4)
+position = Vector2(0, 2)
 
 [node name="Bone_Sword" type="Node2D" parent="FlippedContainer/Bones/Bone_Body/Bone_RightArm"]
-position = Vector2(0, 10)
+position = Vector2(0, 5)
 rotation = 0.7854
 
 [node name="Sword" type="Sprite2D" parent="FlippedContainer/Bones/Bone_Body/Bone_RightArm/Bone_Sword"]
@@ -68,7 +68,7 @@ position = Vector2(4, -4)
 texture = ExtResource("3_3")
 
 [node name="Bone_Head" type="Node2D" parent="FlippedContainer/Bones/Bone_Body"]
-position = Vector2(0, -12)
+position = Vector2(0, -2)
 
 [node name="Head" type="Sprite2D" parent="FlippedContainer/Bones/Bone_Body/Bone_Head"]
 position = Vector2(0, -4)

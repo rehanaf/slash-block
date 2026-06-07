@@ -64,6 +64,9 @@ func _process(delta):
 			
 	queue_redraw()
 
+func is_degenerate(a: Vector2, b: Vector2, c: Vector2) -> bool:
+	return abs((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)) < 0.01
+
 func _draw():
 	if trail_points.size() < 2:
 		return
@@ -102,21 +105,26 @@ func _draw():
 		
 		# Part 1 (Base to Mid):
 		# Draw as two triangles to prevent triangulation failure on self-intersecting quads
-		draw_polygon(
-			PackedVector2Array([p1.base, mid1, mid2]),
-			PackedColorArray([col_inner1, col_mid1, col_mid2])
-		)
-		draw_polygon(
-			PackedVector2Array([p1.base, mid2, p2.base]),
-			PackedColorArray([col_inner1, col_mid2, col_inner2])
-		)
+		if not is_degenerate(p1.base, mid1, mid2):
+			draw_polygon(
+				PackedVector2Array([p1.base, mid1, mid2]),
+				PackedColorArray([col_inner1, col_mid1, col_mid2])
+			)
+		if not is_degenerate(p1.base, mid2, p2.base):
+			draw_polygon(
+				PackedVector2Array([p1.base, mid2, p2.base]),
+				PackedColorArray([col_inner1, col_mid2, col_inner2])
+			)
 		
 		# Part 2 (Mid to Tip):
-		draw_polygon(
-			PackedVector2Array([mid1, p1.tip, p2.tip]),
-			PackedColorArray([col_mid1, col_outer1, col_outer2])
-		)
-		draw_polygon(
-			PackedVector2Array([mid1, p2.tip, mid2]),
-			PackedColorArray([col_mid1, col_outer2, col_mid2])
-		)
+		if not is_degenerate(mid1, p1.tip, p2.tip):
+			draw_polygon(
+				PackedVector2Array([mid1, p1.tip, p2.tip]),
+				PackedColorArray([col_mid1, col_outer1, col_outer2])
+			)
+		if not is_degenerate(mid1, p2.tip, mid2):
+			draw_polygon(
+				PackedVector2Array([mid1, p2.tip, mid2]),
+				PackedColorArray([col_mid1, col_outer2, col_mid2])
+			)
+
