@@ -48,5 +48,22 @@ var weapons = [
 		"inner": Color(0.85, 0.65, 0.45),  # Light Wood Brown
 		"outline": Color(0.5, 0.3, 0.15)    # Dark Wood Brown
 	}
+		{
+			"name": "Axe",
+			"texture": "res://assets/items/axe.png",
+			"inner": Color(0.8, 0.4, 0.2),   # Brownish
+			"outline": Color(0.3, 0.15, 0.05),
+			"attack_duration": 0.5,
+			"attack_cooldown": 0.6
+		},
+		{
+			"name": "Spear",
+			"texture": "res://assets/items/spear.png",
+			"inner": Color(0.9, 0.9, 0.4),   # Light Yellow
+			"outline": Color(0.6, 0.6, 0.2),
+			"attack_duration": 0.7,
+			"attack_cooldown": 0.8
+		}
 ]
+
 

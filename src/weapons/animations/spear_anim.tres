@@ -1,0 +1,25 @@
+[ext_resource type="Script" path="res://src/weapons/weapon_anim.gd" id=1]
+[resource type="WeaponAnim"]
+duration = 0.6
+loop = false
+keyframes = [{
+    "time": 0.0,
+    "rotations": {
+        "right_arm": {
+            "rot": -1.0,
+            "off": Vector2(0,0),
+            "scl": Vector2(1,1),
+            "skw": Vector2(0,0)
+        }
+    }
+}, {
+    "time": 0.6,
+    "rotations": {
+        "right_arm": {
+            "rot": 0.0,
+            "off": Vector2(0,0),
+            "scl": Vector2(1,1),
+            "skw": Vector2(0,0)
+        }
+    }
+}]

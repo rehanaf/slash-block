@@ -305,6 +305,66 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_arrow_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_arrow_btn")
 theme_override_styles/normal = SubResource("StyleBoxFlat_arrow_btn")
 text = ">"
+# Weapon selection panel
+[node name="PanelWeapon" type="Panel" parent="UI/MenuContainer"]
+offset_left = 550.0
+offset_top = 540.0
+offset_right = 986.0
+offset_bottom = 660.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel_char")
+
+[node name="WeaponLabel" type="Label" parent="UI/MenuContainer/PanelWeapon"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = -88.0
+offset_right = -50.0
+offset_bottom = -58.0
+grow_vertical = 0
+pivot_offset = Vector2(168, 15)
+theme_override_colors/font_color = Color(0.352941, 0.784314, 0.980392, 1)
+theme_override_font_sizes/font_size = 18
+text = "Axe"
+horizontal_alignment = 1
+
+[node name="PrevButton" type="Button" parent="UI/MenuContainer/PanelWeapon"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 36.0
+offset_top = -94.0
+offset_right = 86.0
+offset_bottom = -44.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = SubResource("StyleBoxFlat_arrow_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_arrow_btn")
+theme_override_styles/normal = SubResource("StyleBoxFlat_arrow_btn")
+text = "<"
+
+[node name="NextButton" type="Button" parent="UI/MenuContainer/PanelWeapon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -86.0
+offset_top = -94.0
+offset_right = -36.0
+offset_bottom = -44.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = SubResource("StyleBoxFlat_arrow_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_arrow_btn")
+theme_override_styles/normal = SubResource("StyleBoxFlat_arrow_btn")
+text = ">"
 
 
 [node name="HelpPanel" type="Panel" parent="UI/MenuContainer"]

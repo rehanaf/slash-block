@@ -7,6 +7,8 @@ var player_preview: CharacterBody2D = null
 # Skins list
 var skins = ["captenpanez", "steve", "dream", "fiz"]
 var selected_idx = 0
+var weapons = []
+var selected_weapon_idx = 0
 
 # Nodes
 @onready var char_name_label = $UI/MenuContainer/PanelChar/CharNameLabel
@@ -15,6 +17,9 @@ var selected_idx = 0
 @onready var quit_button = $UI/MenuContainer/PanelMenu/QuitButton
 @onready var prev_button = $UI/MenuContainer/PanelChar/PrevButton
 @onready var next_button = $UI/MenuContainer/PanelChar/NextButton
+@onready var weapon_label = $UI/MenuContainer/PanelWeapon/WeaponLabel
+@onready var weapon_prev_button = $UI/MenuContainer/PanelWeapon/PrevButton
+@onready var weapon_next_button = $UI/MenuContainer/PanelWeapon/NextButton
 
 # Background elements
 var clouds = []
@@ -45,6 +50,18 @@ func _ready():
 	if get_tree() and get_tree().root:
 		get_tree().root.size_changed.connect(adjust_menu_safe_area)
 	adjust_menu_safe_area()
+	# Initialize weapons
+	weapons = []
+	for w in Global.weapons:
+		weapons.append(w["name"])
+	selected_weapon_idx = weapons.find(Global.selected_weapon)
+	if selected_weapon_idx == -1:
+		selected_weapon_idx = 0
+	Global.selected_weapon = weapons[selected_weapon_idx]
+	# Connect weapon navigation buttons
+	weapon_prev_button.pressed.connect(_on_weapon_prev_pressed)
+	weapon_next_button.pressed.connect(_on_weapon_next_pressed)
+	update_weapon_ui()
 	
 	# Create some moonlit clouds for the background
 	for i in range(5):
@@ -174,3 +191,19 @@ func _on_prev_pressed():
 func _on_next_pressed():
 	selected_idx = (selected_idx + 1) % skins.size()
 	update_character_ui()
+
+func update_weapon_ui():
+	if weapon_label:
+		weapon_label.text = weapons[selected_weapon_idx]
+	# Update global selected weapon
+	if has_node("/root/Global"):
+		var global = get_node("/root/Global")
+		global.selected_weapon = weapons[selected_weapon_idx]
+
+func _on_weapon_prev_pressed():
+	selected_weapon_idx = (selected_weapon_idx - 1 + weapons.size()) % weapons.size()
+	update_weapon_ui()
+
+func _on_weapon_next_pressed():
+	selected_weapon_idx = (selected_weapon_idx + 1) % weapons.size()
+	update_weapon_ui()

@@ -1,0 +1,8 @@
+[ext_resource type="Script" path="res://src/weapons/weapon.gd" id=1]
+[resource type="Weapon"]
+name = "Spear"
+texture = "res://assets/items/spear.png"
+inner = Color(0.9, 0.9, 0.4)
+outline = Color(0.6, 0.6, 0.2)
+attack_duration = 0.7
+attack_cooldown = 0.8

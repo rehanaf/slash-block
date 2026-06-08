@@ -59,7 +59,7 @@ func setup_buttons():
 			"label": "ATTACK"
 		},
 		"jump": {
-			"center": Vector2(safe_width - 140, safe_height - 320),
+			"center": Vector2(safe_width - 320, safe_height - 140),
 			"radius": 60.0,
 			"color": Color(0.2, 0.6, 0.9, 0.35), # Transparent blue
 			"color_pressed": Color(0.2, 0.6, 0.9, 0.7),
@@ -69,7 +69,7 @@ func setup_buttons():
 			"label": "JUMP"
 		},
 		"dash": {
-			"center": Vector2(safe_width - 320, safe_height - 140),
+			"center": Vector2(safe_width - 140, safe_height - 320),
 			"radius": 56.0,
 			"color": Color(0.9, 0.7, 0.1, 0.35), # Transparent yellow
 			"color_pressed": Color(0.9, 0.7, 0.1, 0.7),

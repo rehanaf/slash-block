@@ -32,6 +32,8 @@ const COMBO_WINDOW = 0.6
 var attack_cooldown: float = 0.0
 var current_attack_time: float = 0.0
 var attack_duration: float = 0.3
+var base_attack_duration: float = 0.3
+var base_attack_cooldown: float = 0.3
 
 # Skins list
 var skins = ["captenpanez", "steve", "dream", "fiz"]
@@ -367,11 +369,14 @@ func trigger_attack():
 		
 	# Setup cooldowns
 	if combo_step == 3:
-		attack_cooldown = 0.4
-		attack_duration = 0.4
+		# Use weapon-specific values for the final hit
+		attack_cooldown = base_attack_cooldown
+		attack_duration = base_attack_duration
 	else:
-		attack_cooldown = 0.3
-		attack_duration = 0.3
+		# Use same values for earlier hits (could be tweaked per combo if desired)
+		attack_cooldown = base_attack_cooldown
+		attack_duration = base_attack_duration
+
 		
 	current_attack_time = 0.0
 	combo_reset_timer = COMBO_WINDOW
@@ -946,13 +951,29 @@ func apply_weapon(index: int):
 			global.selected_weapon = weapon_data.name
 			
 	if weapon_data:
+		# Load texture as before
 		var tex = load(weapon_data.texture)
 		if tex:
 			var sword_node = $FlippedContainer/Bones/Bone_Body/Bone_RightArm/Bone_Sword/Sword
 			if sword_node:
 				sword_node.texture = tex
 				sword_node.scale = Vector2(0.5, 0.5)
-		weapon_changed.emit(weapon_data.name)
+		# Set base attack timing from weapon data, with fallbacks
+		if weapon_data.has("attack_duration"):
+			base_attack_duration = weapon_data.attack_duration
+		else:
+			base_attack_duration = 0.3
+		if weapon_data.has("attack_cooldown"):
+			base_attack_cooldown = weapon_data.attack_cooldown
+		else:
+			base_attack_cooldown = 0.3
+	weapon_changed.emit(weapon_data.name)
+	# Load weapon‑specific attack animation if it provides one
+	if weapon_data.attack_anim:
+		custom_animations["attack"] = weapon_data.attack_anim
+	else:
+		custom_animations.erase("attack")
+
 
 func cycle_weapon():
 	if has_node("/root/Global"):
