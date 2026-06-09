@@ -1,0 +1,257 @@
+[gd_scene load_steps=3 format=3 uid="uid://inventory_ui_uid"]
+
+[ext_resource type="Script" path="res://src/ui/inventory_ui.gd" id="1_invui"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inv_panel"]
+bg_color = Color(0.12, 0.12, 0.15, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.3, 0.4, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="InventoryUI" type="CanvasLayer"]
+script = ExtResource("1_invui")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -280.0
+offset_bottom = 64.0
+grow_horizontal = 0
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="QuickSlots" type="HBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Slot1" type="Panel" parent="MarginContainer/HBoxContainer/QuickSlots"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+
+[node name="BG" type="ColorRect" parent="MarginContainer/HBoxContainer/QuickSlots/Slot1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.1, 0.1, 0.6)
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer/QuickSlots/Slot1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/QuickSlots/Slot1"]
+layout_mode = 1
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 12.0
+offset_bottom = 19.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 12
+text = "1"
+
+[node name="Slot2" type="Panel" parent="MarginContainer/HBoxContainer/QuickSlots"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+
+[node name="BG" type="ColorRect" parent="MarginContainer/HBoxContainer/QuickSlots/Slot2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.1, 0.1, 0.6)
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer/QuickSlots/Slot2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/QuickSlots/Slot2"]
+layout_mode = 1
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 12.0
+offset_bottom = 19.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 12
+text = "2"
+
+[node name="Slot3" type="Panel" parent="MarginContainer/HBoxContainer/QuickSlots"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+
+[node name="BG" type="ColorRect" parent="MarginContainer/HBoxContainer/QuickSlots/Slot3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.1, 0.1, 0.6)
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer/QuickSlots/Slot3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/QuickSlots/Slot3"]
+layout_mode = 1
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 12.0
+offset_bottom = 19.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 12
+text = "3"
+
+[node name="Slot4" type="Panel" parent="MarginContainer/HBoxContainer/QuickSlots"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+
+[node name="BG" type="ColorRect" parent="MarginContainer/HBoxContainer/QuickSlots/Slot4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.1, 0.1, 0.6)
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer/QuickSlots/Slot4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/QuickSlots/Slot4"]
+layout_mode = 1
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 12.0
+offset_bottom = 19.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 12
+text = "4"
+
+[node name="InventoryButton" type="Button" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+text = "INV"
+
+[node name="InventoryPanel" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 200.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_inv_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="InventoryPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InventoryPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="InventoryPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.843137, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+text = "INVENTORY"
+horizontal_alignment = 1
+
+[node name="TabContainer" type="TabContainer" parent="InventoryPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Weapon" type="Control" parent="InventoryPanel/MarginContainer/VBoxContainer/TabContainer"]
+layout_mode = 2
+
+[node name="Material" type="Control" parent="InventoryPanel/MarginContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Food" type="Control" parent="InventoryPanel/MarginContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="InventoryPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="InventoryPanel/MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 6

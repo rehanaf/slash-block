@@ -75,11 +75,13 @@ func setup_inputs():
 		"jump": [KEY_SPACE],
 		"dash": [KEY_SHIFT, KEY_K],
 		"attack": [KEY_J],
-		"change_skin": [KEY_C],
-		"change_weapon": [KEY_V],
+		"toggle_inventory": [KEY_TAB],
 		"reset": [KEY_R],
-		"sneak": [KEY_S, KEY_DOWN]
-
+		"sneak": [KEY_S, KEY_DOWN],
+		"quick_1": [KEY_1],
+		"quick_2": [KEY_2],
+		"quick_3": [KEY_3],
+		"quick_4": [KEY_4]
 	}
 	
 	for action in inputs.keys():
@@ -316,6 +318,10 @@ func spawn_player():
 	player_inst.player_attacked.connect(_on_player_attacked)
 	player_inst.skin_changed.connect(_on_player_skin_changed)
 	player_inst.weapon_changed.connect(_on_player_weapon_changed)
+	
+	if has_node("CanvasLayer/InventoryUI"):
+		var inv_ui = get_node("CanvasLayer/InventoryUI")
+		inv_ui.quick_slot_changed.connect(player_inst._on_quick_slot_changed)
 	
 	# Update initial HUD
 	hud_skin_label.text = "Skin: " + player_inst.skins[player_inst.current_skin_index].capitalize()

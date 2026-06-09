@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://src/world/world.gd" id="1_1"]
 [ext_resource type="Script" path="res://src/ui/touch_controls.gd" id="2_2"]
+[ext_resource type="PackedScene" path="res://src/ui/inventory_ui.tscn" id="3_invui"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hud"]
 bg_color = Color(0.0823529, 0.0901961, 0.129412, 0.784314)
@@ -115,6 +116,8 @@ position_smoothing_enabled = true
 position_smoothing_speed = 8.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="InventoryUI" parent="CanvasLayer" instance=ExtResource("3_invui")]
 
 [node name="HUD" type="Control" parent="CanvasLayer"]
 layout_mode = 3

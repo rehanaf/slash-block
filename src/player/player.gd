@@ -104,13 +104,8 @@ func _ready():
 	# Apply initial weapon from Global autoload if available
 	if has_node("/root/Global"):
 		var global = get_node("/root/Global")
-		var idx = 0
-		for i in range(global.weapons.size()):
-			if global.weapons[i].name == global.selected_weapon:
-				idx = i
-				break
-		current_weapon_index = idx
-	apply_weapon(current_weapon_index)
+		if global.quick_slots.size() > 0:
+			apply_weapon(global.quick_slots[global.active_quick_slot])
 
 	
 	# Enable nearest filtering for all child sprites (pixel art crispness)
@@ -126,13 +121,6 @@ func _ready():
 func _unhandled_input(event):
 	if is_preview or is_dead:
 		return
-		
-	if event.is_action_pressed("change_skin"):
-		cycle_skin()
-		
-	if event.is_action_pressed("change_weapon"):
-		cycle_weapon()
-
 		
 	if event.is_action_pressed("attack") and attack_cooldown <= 0:
 		trigger_attack()
@@ -941,14 +929,22 @@ func die():
 		get_tree().reload_current_scene()
 	)
 
-func apply_weapon(index: int):
-	current_weapon_index = index
+func apply_weapon(item_id: String):
+	if item_id == "":
+		# Hide weapon if empty slot
+		var sword_node = $FlippedContainer/Bones/Bone_Body/Bone_RightArm/Bone_Sword/Sword
+		if sword_node:
+			sword_node.texture = null
+		return
+		
 	var weapon_data = null
 	if has_node("/root/Global"):
 		var global = get_node("/root/Global")
-		if index >= 0 and index < global.weapons.size():
-			weapon_data = global.weapons[index]
+		weapon_data = global.get_item_data(item_id)
+		if weapon_data and weapon_data.type == "weapon":
 			global.selected_weapon = weapon_data.name
+		else:
+			weapon_data = null # Not a weapon
 			
 	if weapon_data:
 		# Load texture as before
@@ -967,20 +963,18 @@ func apply_weapon(index: int):
 			base_attack_cooldown = weapon_data.attack_cooldown
 		else:
 			base_attack_cooldown = 0.3
-	weapon_changed.emit(weapon_data.name)
-	# Load weapon‑specific attack animation if it provides one
-	if weapon_data.attack_anim:
-		custom_animations["attack"] = weapon_data.attack_anim
-	else:
-		custom_animations.erase("attack")
+			
+		weapon_changed.emit(weapon_data.name)
+		
+		# Load weapon‑specific attack animation if it provides one
+		if weapon_data.has("attack_anim") and weapon_data.attack_anim:
+			custom_animations["attack"] = weapon_data.attack_anim
+		else:
+			custom_animations.erase("attack")
 
-
-func cycle_weapon():
-	if has_node("/root/Global"):
-		var global = get_node("/root/Global")
-		var next_idx = (current_weapon_index + 1) % global.weapons.size()
-		apply_weapon(next_idx)
-		spawn_skin_particles() # Visual feedback on swap
+func _on_quick_slot_changed(slot_index: int, item_id: String):
+	apply_weapon(item_id)
+	spawn_skin_particles() # Visual feedback on swap
 
 func get_weapon_colors() -> Dictionary:
 	var default_colors = {

@@ -305,7 +305,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_arrow_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_arrow_btn")
 theme_override_styles/normal = SubResource("StyleBoxFlat_arrow_btn")
 text = ">"
-# Weapon selection panel
+
 [node name="PanelWeapon" type="Panel" parent="UI/MenuContainer"]
 offset_left = 550.0
 offset_top = 540.0
