@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://torch_scene_uid"]
+
+[ext_resource type="Texture2D" uid="uid://d3x15x5g" path="res://assets/blocks/torch_on.png" id="1_torch"]
+
+[sub_resource type="Gradient" id="Gradient_light"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_light"]
+gradient = SubResource("Gradient_light")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.85, 0.85)
+
+[node name="Torch" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_torch")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(1, 0.85, 0.6, 1)
+energy = 1.2
+texture = SubResource("GradientTexture2D_light")
+texture_scale = 3.0

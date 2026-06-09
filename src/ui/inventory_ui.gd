@@ -38,8 +38,8 @@ func update_quickbar():
 		
 		if item_id != "":
 			var data = Global.get_item_data(item_id)
-			if data and data.has("texture"):
-				icon_rect.texture = load(data.texture)
+			if data and data.get("texture") != null:
+				icon_rect.texture = data.texture
 				icon_rect.show()
 			else:
 				icon_rect.hide()
@@ -82,7 +82,7 @@ func create_item_slot(item_data):
 	var tr = TextureRect.new()
 	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	tr.texture = load(item_data.texture)
+	tr.texture = item_data.texture
 	tr.set_anchors_preset(Control.PRESET_FULL_RECT)
 	tr.offset_left = 4
 	tr.offset_top = 4

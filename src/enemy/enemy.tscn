@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://src/enemy/enemy_draw.gd" id="2_2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
-size = Vector2(8, 16)
+size = Vector2(8, 14)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
 bg_color = Color(0.2, 0.2, 0.2, 0.6)

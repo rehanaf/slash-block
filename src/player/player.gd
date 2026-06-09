@@ -948,18 +948,18 @@ func apply_weapon(item_id: String):
 			
 	if weapon_data:
 		# Load texture as before
-		var tex = load(weapon_data.texture)
+		var tex = weapon_data.texture
 		if tex:
 			var sword_node = $FlippedContainer/Bones/Bone_Body/Bone_RightArm/Bone_Sword/Sword
 			if sword_node:
 				sword_node.texture = tex
 				sword_node.scale = Vector2(0.5, 0.5)
 		# Set base attack timing from weapon data, with fallbacks
-		if weapon_data.has("attack_duration"):
+		if "attack_duration" in weapon_data:
 			base_attack_duration = weapon_data.attack_duration
 		else:
 			base_attack_duration = 0.3
-		if weapon_data.has("attack_cooldown"):
+		if "attack_cooldown" in weapon_data:
 			base_attack_cooldown = weapon_data.attack_cooldown
 		else:
 			base_attack_cooldown = 0.3
@@ -967,7 +967,7 @@ func apply_weapon(item_id: String):
 		weapon_changed.emit(weapon_data.name)
 		
 		# Load weapon‑specific attack animation if it provides one
-		if weapon_data.has("attack_anim") and weapon_data.attack_anim:
+		if "attack_anim" in weapon_data and weapon_data.attack_anim != null:
 			custom_animations["attack"] = weapon_data.attack_anim
 		else:
 			custom_animations.erase("attack")
@@ -984,11 +984,11 @@ func get_weapon_colors() -> Dictionary:
 	
 	if has_node("/root/Global"):
 		var global = get_node("/root/Global")
-		if current_weapon_index >= 0 and current_weapon_index < global.weapons.size():
-			var weapon_data = global.weapons[current_weapon_index]
+		var item_data = global.get_active_quick_item()
+		if item_data and item_data.type == "weapon":
 			return {
-				"inner": weapon_data.inner,
-				"outline": weapon_data.outline
+				"inner": item_data.inner_color,
+				"outline": item_data.outline_color
 			}
 			
 	# Fallback: try to sample colors from the texture if it's dynamic

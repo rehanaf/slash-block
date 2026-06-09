@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="FoodData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/data/items/foods/food_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/items/bread.png" id="2_tex"]
+
+[resource]
+script = ExtResource("1_script")
+heal_amount = 25
+id = "bread"
+name = "Bread"
+type = "food"
+texture = ExtResource("2_tex")

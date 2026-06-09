@@ -18,76 +18,24 @@ var active_quick_slot = 0 # 0 to 3
 var selected_weapon: String = "iron_sword"
 
 # Database of all items in the game
-var item_database = {
-	# Weapons
-	"iron_sword": {
-		"id": "iron_sword",
-		"name": "Iron Sword",
-		"type": "weapon",
-		"texture": "res://assets/items/iron_sword.png",
-		"inner": Color(0.85, 0.85, 0.85),
-		"outline": Color(0.45, 0.48, 0.52),
-		"attack_duration": 0.3,
-		"attack_cooldown": 0.3
-	},
-	"iron_axe": {
-		"id": "iron_axe",
-		"name": "Iron Axe",
-		"type": "weapon",
-		"texture": "res://assets/items/iron_axe.png",
-		"inner": Color(0.8, 0.4, 0.2),
-		"outline": Color(0.3, 0.15, 0.05),
-		"attack_duration": 0.5,
-		"attack_cooldown": 0.6
-	},
-	"iron_spear": {
-		"id": "iron_spear",
-		"name": "Iron Spear",
-		"type": "weapon",
-		"texture": "res://assets/items/spear/iron_spear.png",
-		"inner": Color(0.9, 0.9, 0.4),
-		"outline": Color(0.6, 0.6, 0.2),
-		"attack_duration": 0.7,
-		"attack_cooldown": 0.8
-	},
-	# Materials (Examples)
-	"wood": {
-		"id": "wood",
-		"name": "Wood",
-		"type": "material",
-		"texture": "res://assets/items/door_wood.png" # Placeholder
-	},
-	"stone": {
-		"id": "stone",
-		"name": "Stone",
-		"type": "material",
-		"texture": "res://assets/items/flint.png" # Placeholder
-	},
-	# Food (Examples)
-	"apple": {
-		"id": "apple",
-		"name": "Apple",
-		"type": "food",
-		"texture": "res://assets/items/apple.png",
-		"heal_amount": 10
-	},
-	"bread": {
-		"id": "bread",
-		"name": "Bread",
-		"type": "food",
-		"texture": "res://assets/items/bread.png",
-		"heal_amount": 25
-	}
-}
+var item_database = {}
 
-# Legacy support for player.gd and menu.gd temporarily (if needed)
-var weapons = [
-	item_database["iron_sword"],
-	item_database["iron_axe"],
-	item_database["iron_spear"]
-]
+# Time System
+var tick_speed: float = 10.0 # 1.0 is normal speed
+var time_elapsed: float = 0.0 # In game seconds
+
+func _process(delta):
+	time_elapsed += delta * tick_speed
+
+# Returns a value between 0.0 and 1.0 representing the progress of a day
+# 1 Day = 24 in-game minutes = 1440 in-game seconds
+func get_time_of_day() -> float:
+	return fmod(time_elapsed / 1440.0, 1.0)
+
 
 func _ready():
+	_load_all_item_resources()
+	
 	# Initialize inventory with starting items
 	add_item("iron_sword", 1)
 	add_item("iron_axe", 1)
@@ -98,12 +46,35 @@ func _ready():
 	add_item("apple", 3)
 	add_item("bread", 2)
 
+func _load_all_item_resources():
+	var paths = [
+		"res://src/data/items/weapons/",
+		"res://src/data/items/materials/",
+		"res://src/data/items/foods/"
+	]
+	
+	for path in paths:
+		if DirAccess.dir_exists_absolute(path):
+			var dir = DirAccess.open(path)
+			if dir:
+				dir.list_dir_begin()
+				var file_name = dir.get_next()
+				while file_name != "":
+					if not dir.current_is_dir() and file_name.ends_with(".tres"):
+						var res_path = path + file_name
+						var resource = load(res_path)
+						if resource and resource.get("id") != null and resource.get("type") != null:
+							item_database[resource.id] = resource
+					file_name = dir.get_next()
+				dir.list_dir_end()
+
 # Function to add items to inventory
 func add_item(item_id: String, amount: int = 1):
 	if not item_database.has(item_id):
 		return
 		
-	var item_type = item_database[item_id].type
+	var item_data = item_database[item_id]
+	var item_type = item_data.type
 	if inventory.has(item_type):
 		# Check if already exists (for stackable items like food/materials)
 		var found = false
@@ -117,9 +88,17 @@ func add_item(item_id: String, amount: int = 1):
 				break
 				
 		if not found:
-			var new_item = item_database[item_id].duplicate()
-			new_item["amount"] = amount
-			inventory[item_type].append(new_item)
+			# Dictionaries are duplicated via duplicate(), but for Objects (Resources),
+			# we typically wrap them in a Dictionary to track amount separately from the shared Resource.
+			var item_entry = {
+				"id": item_data.id,
+				"name": item_data.name,
+				"type": item_data.type,
+				"texture": item_data.texture,
+				"resource": item_data, # Store reference to the Resource
+				"amount": amount
+			}
+			inventory[item_type].append(item_entry)
 
 func get_item_data(item_id: String):
 	if item_database.has(item_id):
@@ -131,3 +110,24 @@ func get_active_quick_item():
 	if id != "":
 		return get_item_data(id)
 	return null
+
+func has_item(item_id: String, amount: int = 1) -> bool:
+	if not item_database.has(item_id): return false
+	var item_type = item_database[item_id].type
+	for item in inventory[item_type]:
+		if item.id == item_id and item.amount >= amount:
+			return true
+	return false
+
+func remove_item(item_id: String, amount: int = 1) -> bool:
+	if not has_item(item_id, amount): return false
+	var item_type = item_database[item_id].type
+	
+	for i in range(inventory[item_type].size()):
+		var item = inventory[item_type][i]
+		if item.id == item_id:
+			item.amount -= amount
+			if item.amount <= 0:
+				inventory[item_type].remove_at(i)
+			return true
+	return false

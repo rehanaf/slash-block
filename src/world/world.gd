@@ -5,6 +5,10 @@ const BLOCK_SIZE = 16.0
 # Preloads
 var player_scene = preload("res://src/player/player.tscn")
 var enemy_scene = preload("res://src/enemy/enemy.tscn")
+var torch_scene = preload("res://src/world/torch.tscn")
+var inventory_ui_scene = preload("res://src/ui/inventory_ui.tscn")
+var resource_node_scene = preload("res://src/world/resource_node.tscn")
+var crafting_table_scene = preload("res://src/world/crafting_table.tscn")
 
 # Camera Shake
 var shake_intensity: float = 0.0
@@ -54,11 +58,16 @@ func _ready():
 	# 4. Spawn enemies
 	spawn_enemies()
 	
-	# 5. Place floating tutorial labels in the world
+	# 5. Spawn torches
+	_spawn_torches()
+	
+	# 6. Place floating tutorial labels in the world
 	place_tutorial_labels()
 	
 	# Set background color to midnight night sky
 	RenderingServer.set_default_clear_color(Color(0.04, 0.05, 0.11))
+	
+	spawn_resources()
 	
 	# 6. Adjust HUD positioning based on 16:9 safe area
 	$CanvasLayer/HUD.resized.connect(adjust_hud_safe_area)
@@ -81,7 +90,8 @@ func setup_inputs():
 		"quick_1": [KEY_1],
 		"quick_2": [KEY_2],
 		"quick_3": [KEY_3],
-		"quick_4": [KEY_4]
+		"quick_4": [KEY_4],
+		"interact": [KEY_E, KEY_F]
 	}
 	
 	for action in inputs.keys():
@@ -212,8 +222,10 @@ func generate_level():
 	# Floor at y = 8 (grass).
 	# Side walls:
 	for y in range(5, 8):
-		tile_map.set_cell(0, Vector2i(-10, y), 1, Vector2i(0, 1)) # Oak Wood wall
-		tile_map.set_cell(0, Vector2i(-3, y), 1, Vector2i(0, 1))  # Oak Wood wall
+		tile_map.set_cell(0, Vector2i(-10, y), 1, Vector2i(0, 1)) # Oak Wood wall (Left)
+		
+	# Right wall with a door hole (only place top block)
+	tile_map.set_cell(0, Vector2i(-3, 5), 1, Vector2i(0, 1))
 	# Glass windows:
 	tile_map.set_cell(0, Vector2i(-8, 6), 1, Vector2i(3, 1))
 	tile_map.set_cell(0, Vector2i(-5, 6), 1, Vector2i(3, 1))
@@ -308,6 +320,37 @@ func generate_level():
 	tile_map.set_cell(0, Vector2i(104, 3), 1, Vector2i(0, 2))
 	tile_map.set_cell(0, Vector2i(92, 6), 1, Vector2i(0, 2))
 
+func spawn_resources():
+	var y_pos = 128 - 8 # Block size 16. Grass is at y=8 -> 128. Half block height is 8.
+	
+	# Spawn Crafting Table
+	var table = crafting_table_scene.instantiate()
+	table.position = Vector2(-5 * 16, y_pos)
+	add_child(table)
+	
+	# Spawn Trees
+	var tree_x = [10, 15, 20]
+	for x in tree_x:
+		var tree = resource_node_scene.instantiate()
+		tree.node_type = "tree"
+		tree.position = Vector2(x * 16, y_pos)
+		add_child(tree)
+		
+	# Spawn Rocks
+	var rock_x = [85, 90, 95]
+	for x in rock_x:
+		var rock = resource_node_scene.instantiate()
+		rock.node_type = "rock"
+		rock.position = Vector2(x * 16, y_pos)
+		add_child(rock)
+		
+	# Spawn an Apple tree for food drops
+	var apple_tree = resource_node_scene.instantiate()
+	apple_tree.node_type = "tree"
+	apple_tree.drop_item_id = "apple"
+	apple_tree.position = Vector2(25 * 16, y_pos)
+	add_child(apple_tree)
+
 func spawn_player():
 	player_inst = player_scene.instantiate()
 	player_inst.process_mode = PROCESS_MODE_PAUSABLE
@@ -353,6 +396,20 @@ func spawn_enemy_at(pos: Vector2, type: String = "zombie"):
 	enemy_inst.position = pos
 	add_child(enemy_inst)
 
+func _spawn_torches():
+	var torch_positions = [
+		Vector2(-6 * BLOCK_SIZE, 6 * BLOCK_SIZE),   # Inside starter cabin
+		Vector2(-6 * BLOCK_SIZE, 17 * BLOCK_SIZE),  # Cave
+		Vector2(1 * BLOCK_SIZE, 17 * BLOCK_SIZE),   # Cave extension
+		Vector2(101 * BLOCK_SIZE, 3 * BLOCK_SIZE),  # Castle interior
+		Vector2(104 * BLOCK_SIZE, 0 * BLOCK_SIZE)   # Castle top
+	]
+	
+	for pos in torch_positions:
+		var t = torch_scene.instantiate()
+		t.position = pos
+		add_child(t)
+
 func place_tutorial_labels():
 	create_world_label("<- Starter Cabin", Vector2(-6 * BLOCK_SIZE, 3 * BLOCK_SIZE))
 	create_world_label("Underground Cave Entrance v", Vector2(1 * BLOCK_SIZE, 7 * BLOCK_SIZE))
@@ -374,6 +431,8 @@ func create_world_label(txt: String, pos: Vector2):
 	add_child(l)
 
 func _process(delta):
+	_update_day_night_cycle()
+	
 	# Camera follow
 	if player_inst:
 		# Lerp camera to player position
@@ -383,7 +442,7 @@ func _process(delta):
 		# Void death check:
 		if player_inst.global_position.y > 19.0 * BLOCK_SIZE:
 			player_inst.take_damage(100.0, Vector2.ZERO)
-		
+			
 	# Apply camera shake
 	if shake_duration > 0:
 		shake_duration -= delta
@@ -408,6 +467,47 @@ func _process(delta):
 	# Reset player when pressing R
 	if Input.is_action_just_pressed("reset") and not get_tree().paused:
 		get_tree().reload_current_scene()
+
+
+func _update_day_night_cycle():
+	var time = Global.get_time_of_day()
+	var sky_color: Color
+	var modulate_color: Color
+	
+	# Day/Night Colors
+	var night_sky = Color(0.04, 0.05, 0.11)
+	var night_modulate = Color(0.2, 0.2, 0.3)
+	
+	var dawn_sky = Color(0.8, 0.5, 0.3)
+	var dawn_modulate = Color(0.8, 0.7, 0.6)
+	
+	var day_sky = Color(0.5, 0.8, 0.95)
+	var day_modulate = Color(1.0, 1.0, 1.0)
+	
+	var dusk_sky = Color(0.9, 0.4, 0.2)
+	var dusk_modulate = Color(0.9, 0.7, 0.5)
+	
+	# Interpolate based on time
+	if time < 0.25: # Night to Dawn (0-6 hours)
+		var t = time / 0.25
+		sky_color = night_sky.lerp(dawn_sky, t)
+		modulate_color = night_modulate.lerp(dawn_modulate, t)
+	elif time < 0.5: # Dawn to Day (6-12 hours)
+		var t = (time - 0.25) / 0.25
+		sky_color = dawn_sky.lerp(day_sky, t)
+		modulate_color = dawn_modulate.lerp(day_modulate, t)
+	elif time < 0.75: # Day to Dusk (12-18 hours)
+		var t = (time - 0.5) / 0.25
+		sky_color = day_sky.lerp(dusk_sky, t)
+		modulate_color = day_modulate.lerp(dusk_modulate, t)
+	else: # Dusk to Night (18-24 hours)
+		var t = (time - 0.75) / 0.25
+		sky_color = dusk_sky.lerp(night_sky, t)
+		modulate_color = dusk_modulate.lerp(night_modulate, t)
+		
+	RenderingServer.set_default_clear_color(sky_color)
+	if has_node("CanvasModulate"):
+		$CanvasModulate.color = modulate_color
 
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):

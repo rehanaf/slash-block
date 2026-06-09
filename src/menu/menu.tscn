@@ -307,6 +307,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_arrow_btn")
 text = ">"
 
 [node name="PanelWeapon" type="Panel" parent="UI/MenuContainer"]
+visible = false
 offset_left = 550.0
 offset_top = 540.0
 offset_right = 986.0
