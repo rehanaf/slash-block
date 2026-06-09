@@ -49,8 +49,8 @@ func _build_body():
 func _build_humanoid(skin_tex, is_old_format: bool):
 	# Chibi proportions: 2x4 body/arms/legs, 8x8 head
 	var regions = {
-		"Head": Rect2(0, 8, 8, 8),
-		"Body": Rect2(16, 20, 2, 4),
+		"Head": Rect2(3, 8, 8, 8),
+		"Body": Rect2(16, 20, 4, 4),
 		"RightArm": Rect2(40, 20, 2, 4),
 		"LeftArm": Rect2(40, 20, 2, 4) if is_old_format else Rect2(32, 52, 2, 4),
 		"RightLeg": Rect2(0, 20, 2, 4),
@@ -145,7 +145,7 @@ func _build_creeper(skin_tex):
 	bl_leg.texture = skin_tex
 	bl_leg.region_enabled = true
 	bl_leg.region_rect = leg_region
-	bl_leg.position = Vector2(0, 2)
+	bl_leg.position = Vector2(-2, 2)
 	bl_leg.z_index = -2
 	back_left_leg_pivot.add_child(bl_leg)
 	add_child(back_left_leg_pivot)
@@ -157,7 +157,7 @@ func _build_creeper(skin_tex):
 	br_leg.texture = skin_tex
 	br_leg.region_enabled = true
 	br_leg.region_rect = leg_region
-	br_leg.position = Vector2(0, 2)
+	br_leg.position = Vector2(2, 2)
 	br_leg.z_index = -1
 	back_right_leg_pivot.add_child(br_leg)
 	add_child(back_right_leg_pivot)
@@ -168,7 +168,7 @@ func _build_creeper(skin_tex):
 	var body = Sprite2D.new()
 	body.texture = skin_tex
 	body.region_enabled = true
-	body.region_rect = Rect2(16, 20, 2, 4)
+	body.region_rect = Rect2(16, 20, 4, 4)
 	body.position = Vector2(0, 0)
 	body.z_index = 0
 	body_pivot.add_child(body)
@@ -181,7 +181,7 @@ func _build_creeper(skin_tex):
 	fl_leg.texture = skin_tex
 	fl_leg.region_enabled = true
 	fl_leg.region_rect = leg_region
-	fl_leg.position = Vector2(0, 2)
+	fl_leg.position = Vector2(-2, 2)
 	fl_leg.z_index = 1
 	left_leg_pivot.add_child(fl_leg)
 	add_child(left_leg_pivot)
@@ -193,7 +193,7 @@ func _build_creeper(skin_tex):
 	fr_leg.texture = skin_tex
 	fr_leg.region_enabled = true
 	fr_leg.region_rect = leg_region
-	fr_leg.position = Vector2(0, 2)
+	fr_leg.position = Vector2(2, 2)
 	fr_leg.z_index = 2
 	right_leg_pivot.add_child(fr_leg)
 	add_child(right_leg_pivot)
@@ -204,11 +204,12 @@ func _build_creeper(skin_tex):
 	var head = Sprite2D.new()
 	head.texture = skin_tex
 	head.region_enabled = true
-	head.region_rect = Rect2(0, 8, 8, 8)
+	head.region_rect = Rect2(3, 8, 8, 8)
 	head.position = Vector2(0, -4)
 	head.z_index = 3
 	head_pivot.add_child(head)
 	add_child(head_pivot)
+	
 
 # --- Creeper Fuse Visual ---
 func set_fuse_progress(progress: float):

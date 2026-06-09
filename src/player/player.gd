@@ -422,8 +422,8 @@ func apply_skin(skin_name: String):
 	
 	# Chibi proportions (2x4 body/arms/legs, 8x8 head)
 	var regions = {
-		"Head": Rect2(0, 8, 8, 8),
-		"Body": Rect2(16, 20, 2, 4),
+		"Head": Rect2(3, 8, 8, 8),
+		"Body": Rect2(16, 20, 4, 4),
 		"RightArm": Rect2(40, 20, 2, 4),
 		"LeftArm": Rect2(40, 20, 2, 4) if is_old_format else Rect2(32, 52, 2, 4),
 		"RightLeg": Rect2(0, 20, 2, 4),

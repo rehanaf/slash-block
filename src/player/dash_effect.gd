@@ -18,6 +18,9 @@ var color_outer = Color(0.1, 0.45, 0.95)
 var active_timer = 0.0
 var max_active_time = 0.20
 
+# Glow light
+var glow_light: PointLight2D = null
+
 func play_dash(duration: float, inner: Color, outer: Color):
 	color_inner = inner
 	color_outer = outer
@@ -27,6 +30,26 @@ func play_dash(duration: float, inner: Color, outer: Color):
 	
 	# Clear previous trail
 	trail_points.clear()
+	
+	# Create glow light for the dash
+	if glow_light:
+		glow_light.queue_free()
+	glow_light = PointLight2D.new()
+	var glow_color = inner.lerp(outer, 0.5)
+	glow_color.a = 1.0
+	glow_light.color = glow_color
+	glow_light.energy = 1.8
+	var grad = Gradient.new()
+	grad.colors = PackedColorArray([Color.WHITE, Color(0, 0, 0, 0)])
+	var grad_tex = GradientTexture2D.new()
+	grad_tex.gradient = grad
+	grad_tex.fill = GradientTexture2D.FILL_RADIAL
+	grad_tex.fill_from = Vector2(0.5, 0.5)
+	grad_tex.fill_to = Vector2(0.85, 0.85)
+	glow_light.texture = grad_tex
+	glow_light.texture_scale = 3.0
+	add_child(glow_light)
+	
 	queue_redraw()
 
 func _process(delta):
@@ -60,6 +83,17 @@ func _process(delta):
 				"time_left": TRAIL_LIFETIME,
 				"max_time": TRAIL_LIFETIME
 			})
+			
+			# Update glow light position
+			if glow_light:
+				glow_light.position = local_base.lerp(local_tip, 0.5)
+	else:
+		# Fade out glow
+		if glow_light:
+			glow_light.energy = lerpf(glow_light.energy, 0.0, delta * 8.0)
+			if glow_light.energy < 0.05:
+				glow_light.queue_free()
+				glow_light = null
 			
 	queue_redraw()
 
@@ -125,4 +159,3 @@ func _draw():
 				PackedVector2Array([mid1, p2.tip, mid2]),
 				PackedColorArray([col_mid1, col_outer2, col_mid2])
 			)
-
