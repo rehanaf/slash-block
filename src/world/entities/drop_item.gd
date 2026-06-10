@@ -20,12 +20,10 @@ func _ready():
 		if is_instance_valid(self) and $PickupArea:
 			$PickupArea/CollisionShape2D.set_deferred("disabled", false)
 	)
-			
+		
 	$PickupArea.body_entered.connect(_on_body_entered)
 
 func _on_body_entered(body):
 	if body.name == "Player":
 		Global.add_item(item_id, amount)
-		# Update UI slightly by simulating a signal or visual? The inventory is global.
-		# For now just disappear.
 		queue_free()

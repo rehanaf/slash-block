@@ -10,7 +10,7 @@ var health: float
 var is_destroyed: bool = false
 var respawn_timer: float = 0.0
 
-var drop_scene = preload("res://src/world/drop_item.tscn")
+var drop_scene = preload("res://src/world/entities/drop_item.tscn")
 
 func _ready():
 	health = max_health
@@ -28,7 +28,7 @@ func _setup_visuals():
 	for child in get_children():
 		if child is Sprite2D:
 			child.queue_free()
-			
+		
 	if node_type == "tree":
 		_build_tree()
 	elif node_type == "rock":

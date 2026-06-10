@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://torch_scene_uid"]
 
-[ext_resource type="Texture2D" uid="uid://d3x15x5g" path="res://assets/blocks/torch_on.png" id="1_torch"]
+[ext_resource type="Texture2D" path="res://assets/blocks/torch_on.png" id="1_torch"]
 
 [sub_resource type="Gradient" id="Gradient_light"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)

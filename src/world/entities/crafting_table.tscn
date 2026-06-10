@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://crafting_table_uid"]
 
-[ext_resource type="Script" path="res://src/world/crafting_table.gd" id="1_1"]
+[ext_resource type="Script" path="res://src/world/entities/crafting_table.gd" id="1_1"]
 [ext_resource type="Texture2D" path="res://assets/blocks/crafting_table_front.png" id="2_2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]

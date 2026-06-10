@@ -99,7 +99,9 @@ func _process(delta):
 	queue_redraw()
 
 func is_degenerate(a: Vector2, b: Vector2, c: Vector2) -> bool:
-	return abs((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)) < 0.01
+	# Use the cross product (2x signed area). Reject if area < 1.5 px²
+	# to match Godot's internal triangulation tolerance.
+	return abs((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)) < 1.5
 
 func _draw():
 	if trail_points.size() < 2:
