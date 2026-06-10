@@ -7,6 +7,7 @@ const BLOCK_SIZE = 16.0
 # Explicit preloads so class_name resolution works before editor import
 const TilesetBuilderScript  = preload("res://src/world/tileset_builder.gd")
 const WorldGeneratorScript  = preload("res://src/world/world_generator.gd")
+const SkySystemScript       = preload("res://src/world/sky_system.gd")
 
 # ─────────────────────────────────────────────────────────────
 #  PRELOADS
@@ -45,6 +46,11 @@ var player_inst = null
 #  WORLD GENERATOR
 # ─────────────────────────────────────────────────────────────
 var _generator = null  # WorldGenerator instance
+
+# ─────────────────────────────────────────────────────────────
+#  SKY
+# ─────────────────────────────────────────────────────────────
+var _sky_system = null  # SkySystem instance
 
 # ─────────────────────────────────────────────────────────────
 #  HUD EXTRAS
@@ -96,6 +102,9 @@ func _ready():
 	# 8. Coordinate label
 	_create_coord_label()
 
+	# 9. Sky system (sun, moon, clouds) on a background CanvasLayer
+	_setup_sky()
+
 func _create_coord_label() -> void:
 	hud_coord_label = Label.new()
 	hud_coord_label.name = "CoordLabel"
@@ -111,6 +120,17 @@ func _create_coord_label() -> void:
 	hud_coord_label.offset_top    = -32.0
 	hud_coord_label.offset_right  =  200.0
 	$CanvasLayer/HUD.add_child(hud_coord_label)
+
+func _setup_sky() -> void:
+	# Background CanvasLayer sits behind the world (layer -5)
+	var sky_layer = CanvasLayer.new()
+	sky_layer.name  = "SkyLayer"
+	sky_layer.layer = -5
+	add_child(sky_layer)
+
+	_sky_system = SkySystemScript.new()
+	_sky_system.name = "SkySystem"
+	sky_layer.add_child(_sky_system)
 
 # ─────────────────────────────────────────────────────────────
 #  GENERATOR SETUP

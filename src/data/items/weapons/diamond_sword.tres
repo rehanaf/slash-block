@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/data/items/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/items/diamond_sword.png" id="2_tex"]
+
+[resource]
+script = ExtResource("1_script")
+inner_color = Color(0.45, 0.85, 1.0, 1)
+outline_color = Color(0.1, 0.45, 0.95, 1)
+attack_duration = 0.22
+attack_cooldown = 0.22
+id = "diamond_sword"
+name = "Diamond Sword"
+type = "weapon"
+texture = ExtResource("2_tex")

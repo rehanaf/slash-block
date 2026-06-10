@@ -24,6 +24,7 @@ func _ready():
 	$PickupArea.body_entered.connect(_on_body_entered)
 
 func _on_body_entered(body):
-	if body.name == "Player":
+	# Check by group (more reliable than checking node name)
+	if body.is_in_group("player") or body.name == "Player":
 		Global.add_item(item_id, amount)
 		queue_free()
