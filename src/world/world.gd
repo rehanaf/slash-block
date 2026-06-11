@@ -187,8 +187,17 @@ func setup_inputs():
 #  PLAYER
 # ─────────────────────────────────────────────────────────────
 func spawn_player():
+	# Reset quick_slots setiap world dimulai agar tidak carry-over dari sesi sebelumnya
+	if has_node("/root/Global"):
+		var g = get_node("/root/Global")
+		g.quick_slots         = ["iron_sword", "iron_axe", "iron_spear", ""]
+		g.active_quick_slot   = 0
+		g.selected_weapon     = "Iron Sword"
+
 	player_inst = player_scene.instantiate()
 	player_inst.process_mode = PROCESS_MODE_PAUSABLE
+	# Tambahkan ke group "player" agar drop_item bisa detect dengan is_in_group()
+	player_inst.add_to_group("player")
 
 	# Find spawn surface Y
 	var spawn_surf_y = _generator.get_surface_y(0) if _generator else 8
@@ -205,6 +214,7 @@ func spawn_player():
 	hud_skin_label.text = "Skin: " + player_inst.skins[player_inst.current_skin_index].capitalize()
 	if has_node("/root/Global"):
 		hud_weapon_label.text = "Weapon: " + get_node("/root/Global").selected_weapon
+
 
 # ─────────────────────────────────────────────────────────────
 #  ENEMIES
